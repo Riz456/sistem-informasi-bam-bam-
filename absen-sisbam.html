@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absen Kehadiran - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 0;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Ubah warna teks untuk form absen dan judul pada tema gelap */
+body.dark-mode .container {
+    background-color: #1e1e1e;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .container h3 {
+    color: #ffffff; /* Pastikan teks judul tetap putih */
+}
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode button {
+    background-color: #333;
+    color: #ffffff; /* Teks input tetap putih */
+    border: 1px solid #555;
+}
+
+body.dark-mode button:hover {
+    background-color: #444;
+}
+        body.dark-mode .header {
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-mode .menu {
+            background: rgba(30, 30, 30, 0.9);
+        }
+
+        body.dark-mode .menu a:hover {
+            background: #444;
+        }
+
+        body.dark-mode .banner {
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        body.dark-mode .item {
+            background: #1e1e1e;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+
+        body.dark-mode .categories div {
+            color: #ffffff;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+              position: sticky; /* Membuat header tetap di atas */
+             top: 0; /* Menempel di bagian atas */
+              z-index: 1000; /* Memastikan header berada di atas elemen lain */
+        }
+        
+
+        .header .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header .dark-mode-toggle {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Menu Sidebar */
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding-top: 60px;
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            font-size: 18px;
+        }
+
+        .menu a:hover {
+            background: #444;
+        }
+
+        .menu.active {
+            left: 0;
+        }
+
+        /* Banner */
+        .banner {
+            background-color: #e3f2fd;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Form Absen */
+        .container {
+            max-width: 500px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container input, .container select, .container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .container button {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+        .submenu {
+        display: none;
+        background-color: rgba(0, 0, 0, 0.1);
+        padding-left: 20px;
+    }
+
+    .submenu.active {
+        display: block;
+    }
+
+    .submenu a {
+        padding: 10px 20px;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+    }
+
+    .submenu a:hover {
+        background-color: #4547;
+    }
+/* Animasi Keluar ke Atas */
+@keyframes slideUp {
+    from {
+        top: 50px;
+        opacity: 1;
+    }
+    to {
+        top: -100px;
+        opacity: 0;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>SisBam</h2>
+        <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+   <div class="menu" id="menu">
+      <a href="#" onclick="goToPage('i-bam.html')">
+          <i class="fas fa-home"></i>
+          <span data-lang="id">Beranda</span>
+          <span data-lang="en" style="display: none;">Home</span>
+      </a>
+   </a>
+        <a href="#" class="about"><i class="fas fa-info-circle"></i> Tentang <i class="fas fa-caret-down"></i></a>
+    <div class="submenu" id="about-submenu">
+       <a href="#" onclick="goToPage('sisbam-projek.html')">
+    <i class="fas fa-tools"></i>
+    <span data-lang="id">Pembuatan Website</span>
+    <span data-lang="en" style="display: none;">Website History</span>
+</a>
+<a href="#" onclick="goToPage('indeks.html')">
+    <i class="fas fa-globe"></i>
+    <span data-lang="id">Website Sekolah</span>
+    <span data-lang="en" style="display: none;">School Website </span>
+</a>
+<a href="#" onclick="goToPage('blank.html')">
+    <i class="fas fa-book-reader"></i>
+    <span data-lang="id">Aplikasi Litbam</span>
+    <span data-lang="en" style="display: none;">Litbam </span>
+</a>
+<a href="#" onclick="goToPage('blank.html')">
+    <i class="fas fa-user-clock"></i>
+    <span data-lang="id">Agenda</span>
+    <span data-lang="en" style="display: none;">Schedule</span>
+</a>
+  </div>
+      <a href="#" onclick="goToPage('blank.html')">
+          <i class="fas fa-envelope"></i>
+          <span data-lang="id">Surat</span>
+          <span data-lang="en" style="display: none;">Letters</span>
+      </a>
+      <a href="#" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          <span data-lang="id">Logout</span>
+          <span data-lang="en" style="display: none;">Logout</span>
+      </a>
+  </div>
+
+    <!-- Banner Ucapan Selamat Datang -->
+    <div class="banner" id="sambutan">
+        sekarang kamu berada dihalaman absen
+    </div>
+
+    <!-- Form Absen -->
+    <div class="container">
+        <h3>Form Absen</h3>
+        <form id="absen-form">
+            <input type="text" id="nama" placeholder="Nama Lengkap" required>
+            <select id="status" required>
+                <option value="Hadir">Hadir</option>
+                <option value="Sakit">Sakit</option>
+                <option value="Izin">Izin</option>
+            </select>
+            <button type="submit">Kirim Absen</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('menu-sisbam.html')"><i class="fas fa-stream"></i> Menu</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Cek dan set tema gelap berdasarkan localStorage
+        if (localStorage.getItem('dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Fungsi untuk mengaktifkan/deaktifkan menu
+        function toggleMenu() {
+            document.getElementById('menu').classList.toggle('active');
+        }
+          // Cek preferensi tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            const themeToggle = document.getElementById("theme-toggle");
+
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                document.body.classList.remove("dark-mode");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        });
+
+        // Fungsi untuk menavigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk mengubah tema gelap
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
+        }
+
+        // Menambahkan event listener untuk menutup menu jika pengguna mengklik di luar menu
+        document.addEventListener('click', function(event) {
+            var menu = document.getElementById('menu');
+            var menuToggle = document.querySelector('.menu-toggle'); // Tombol hamburger
+            if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Fungsi untuk menambahkan data absensi
+        function addAttendance(name, status) {
+            const attendance = JSON.parse(localStorage.getItem('Absensi')) || [];
+            const newAttendance = {
+                name,
+                date: new Date().toLocaleString(),
+                status,
+            };
+            attendance.push(newAttendance);
+            localStorage.setItem('Absensi', JSON.stringify(attendance));
+        }
+
+        // Menangani submit form absensi
+        document.getElementById('absen-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah form dari refresh halaman
+            const name = document.getElementById('nama').value;
+            const status = document.getElementById('status').value;
+            if (name && status) {
+                addAttendance(name, status); // Menambahkan data absensi
+                alert('Absen berhasil dikirim!');
+                document.getElementById('nama').value = ''; // Reset input nama
+                document.getElementById('status').value = 'Hadir'; // Reset status
+            } else {
+                alert('Harap lengkapi semua kolom!');
+            }
+        });
+        // Fungsi untuk toggle submenu About
+    document.querySelector('.about').addEventListener('click', function() {
+        var submenu = document.getElementById('about-submenu');
+        submenu.classList.toggle('active');
+    });
+    </script>
+</body>
+</html>

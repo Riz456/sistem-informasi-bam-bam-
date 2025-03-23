@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LitBam - Literasi Bam Bam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="website icon" type="png" href="litbam.png">
+    <style>
+        /* CSS yang sudah ada */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #1e2a38;
+            position: sticky; /* Membuat header tetap di atas */
+            top: 0; /* Menempel di bagian atas */
+            z-index: 1000; /* Memastikan header berada di atas elemen lain */
+        }
+        .search-box {
+            width: 50%;
+            padding: 8px;
+            border-radius: 10px;
+            border: none;
+        }
+        .menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .menu i {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .banner {
+            text-align: center;
+            background: linear-gradient(45deg, #2b3f5c, #3a4f6e);
+            padding: 5px;
+            border-radius: 10px;
+            margin: 15px;
+        }
+         #currentTime {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6f61, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+        }
+        .items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+        .item {
+            background: #1f2838;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .item img {
+            width: 100%;
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        .item p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .item .price {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #1e2a38;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .footer-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+        .footer-menu span {
+            font-size: 0.9em;
+            margin-top: 3px;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100%;
+            background: rgba(30, 42, 56, 0.9);
+            transition: right 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .sidebar.active {
+            right: 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 20px;
+        }
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <input type="text" id="searchBox" class="search-box" placeholder="Cari Buku..." oninput="searchBooks()">
+        <div class="menu">
+            <i class="fa fa-envelope"></i>
+            <i class="fa fa-bell"></i>
+            <i class="fa fa-bars" onclick="toggleMenu()"></i>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="sispus-home.html">Home</a></li>
+            <li><a href="buku.html">Buku</a></li>
+            <li><a href="favorit.html">Favorit</a></li>
+            <li><a href="sispus-profile.html">Profil</a></li>
+        </ul>
+    </div>
+
+    <div class="banner">
+        <h2 id="welcomeMessage">Selamat Datang, Pengguna!</h2>
+        <p id="currentTime">Jam: Loading...</p>
+    </div>
+    <div class="categories">
+        <span>Fiksi</span>
+        <span>Non-Fiksi</span>
+        <span>Komik</span>
+        <span>Majalah</span>
+        <span>Referensi</span>
+    </div>
+    <div class="items" id="itemsContainer">
+        <div class="item">
+            <img src="litbam.png" alt="logo sisbam">
+        </div>
+        <div class="item" onclick="goToPage('jadwal-sisbam.html')">
+            <img src="buku-litbam.png" alt="Item">
+            <p data-lang="id">Mata pelajaran</p>
+            <p data-lang="en" style="display: none;">Subjects</p>
+        </div>
+        <div class="item">
+            <img src="robot-ai.png" alt="Item">
+            <p data-lang="id">Tas Sekolah</p>
+            <p data-lang="en" style="display: none;">School Bag</p>
+            <p class="price">Rp 150.000</p>
+        </div>
+        <div class="item">
+            <img src="a.png" alt="Item">
+            <p data-lang="id">Sepatu Olahraga</p>
+            <p data-lang="en" style="display: none;">Sports Shoes</p>
+            <p class="price">Rp 300.000</p>
+        </div> 
+        <div class="item">
+            <img src="robot-ai.png" alt="Item">
+            <p data-lang="id">Tas Sekolah</p>
+            <p data-lang="en" style="display: none;">School Bag</p>
+            <p class="price">Rp 150.000</p>
+        </div>
+        <div class="item">
+            <img src="a.png" alt="Item">
+            <p data-lang="id">Sepatu Olahraga</p>
+            <p data-lang="en" style="display: none;">Sports Shoes</p>
+            <p class="price">Rp 300.000</p>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-menu" onclick="location.href='sispus-home.html';">
+            <i class="fa fa-home"></i>
+            <span>Beranda</span>
+        </div>
+        <div class="footer-menu" onclick="location.href='buku.html';">
+            <i class="fa fa-book"></i>
+            <span>Buku</span>
+        </div>
+        <div class="footer-menu" onclick="location.href='favorit.html';">
+            <i class="fa fa-heart"></i>
+            <span>Favorit</span>
+        </div>
+        <div class="footer-menu" onclick="location.href='sispus-profile.html';">
+            <i class="fa fa-user"></i>
+            <span>Profil</span>
+        </div>
+    </footer>
+
+    <script>
+        // Simulasikan data pengguna yang login
+        const user = {
+            name: localStorage.getItem('username') || "Pengguna" // Ambil nama dari localStorage atau gunakan "Pengguna" sebagai default
+        };
+
+        // Tampilkan sambutan dengan nama pengguna
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        welcomeMessage.textContent = `Selamat Datang, ${user.name}!`;
+
+        // Fungsi untuk menampilkan jam
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const currentTime = document.getElementById('currentTime');
+            currentTime.textContent = `Jam: ${hours}:${minutes}:${seconds}`;
+        }
+
+        // Perbarui jam setiap detik
+        setInterval(updateTime, 1000);
+        updateTime(); // Panggil sekali saat halaman dimuat
+
+        // Fungsi untuk toggle sidebar
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Menutup sidebar saat mengklik di luar area sidebar
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuIcon = document.querySelector('.menu .fa-bars');
+            if (!sidebar.contains(event.target) && !menuIcon.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Fungsi untuk navigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk mencari buku
+        function searchBooks() {
+            const searchBox = document.getElementById('searchBox');
+            const itemsContainer = document.getElementById('itemsContainer');
+            const items = itemsContainer.getElementsByClassName('item');
+            const searchTerm = searchBox.value.toLowerCase();
+
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

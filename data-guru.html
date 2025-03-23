@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Guru - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS Umum */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 0;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        } 
+        body.dark-mode .header {
+              background-color: #1e1e1e;
+              border-bottom: 1px solid #333;
+          }
+  
+          body.dark-mode .menu {
+              background: rgba(30, 30, 30, 0.9);
+          }
+  
+          body.dark-mode .menu a:hover {
+              background: #444;
+          }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              background-color: #fff;
+              padding: 15px;
+              border-bottom: 1px solid #ddd;
+              transition: background-color 0.3s;
+          }
+          .header h2 {
+            margin: 0;
+            font-family: 'Audiowide', sans-serif;
+        }
+  
+          .header .menu-toggle {
+              font-size: 24px;
+              cursor: pointer;
+          }
+  
+          .header .icons {
+              display: flex;
+              gap: 15px;
+          }
+  
+          .header .icons i {
+              font-size: 20px;
+              cursor: pointer;
+          }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .container {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .guru-item {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        body.dark-mode .guru-item {
+            background-color: #333;
+        }
+
+        .guru-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .guru-item h3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .guru-item p {
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>SisBam</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-envelope" onclick="openEmail()"></i>
+            <i class="fas fa-bell" onclick="openNotifications()"></i>
+        </div>
+    </div>
+
+    <!-- Konten Profil Guru -->
+    <div class="container">
+        <h1>Profil Guru</h1>
+        <div id="guruList"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </div>
+        <div onclick="goToPage('menu-sisbam.html')">
+            <i class="fas fa-stream"></i>
+            <span>Menu</span>
+        </div>
+        <div onclick="goToPage('profil-sisbam.html')">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </div>
+        <div onclick="goToPage('pengaturan.html')">
+            <i class="fas fa-cog"></i>
+            <span>Pengaturan</span>
+        </div>
+    </div>
+
+    <script>
+      // Fungsi untuk menavigasi ke halaman tertentu
+          function goToPage(page) {
+              window.location.href = page;
+          }
+        // Ambil data guru dari localStorage
+        const guruData = JSON.parse(localStorage.getItem("guruData")) || [];
+
+        // Fungsi untuk menampilkan data guru
+        function displayGuru() {
+            const guruList = document.getElementById("guruList");
+            guruList.innerHTML = "";
+
+            guruData.forEach((guru, index) => {
+                const guruItem = document.createElement("div");
+                guruItem.className = "guru-item";
+
+                guruItem.innerHTML = `
+                    <img src="${guru.foto}" alt="Foto Profil">
+                    <h3>${guru.nama}</h3>
+                    <p><strong>Mata Pelajaran:</strong> ${guru.mataPelajaran}</p>
+                    <p><strong>Status Pegawai:</strong> ${guru.status}</p>
+                    <p><strong>TMT:</strong> ${guru.tmt}</p>
+                    <p><strong>Email:</strong> ${guru.email}</p>
+                    <p><strong>No WA:</strong> ${guru.wa}</p>
+                    <p><strong>Motto:</strong> ${guru.motto}</p>
+                `;
+
+                guruList.appendChild(guruItem);
+            });
+        }
+
+        // Tampilkan data guru saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            displayGuru();
+        });
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        }
+
+        // Cek preferensi tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            const themeToggle = document.getElementById("theme-toggle");
+
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                document.body.classList.remove("dark-mode");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        });
+    </script>
+</body>
+</html>

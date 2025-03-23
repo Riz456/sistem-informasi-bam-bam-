@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Tema Terang */
+        body.light {
+            background-color: #f9f9f9;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark {
+            background-color: #181818;
+            color: #f4f4f4;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: #181818;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            transition: all 0.3s ease;
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        textarea, button, input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        /* Button */
+        button {
+            background: transparent;
+            color: #007bff;
+            border: 2px solid #007bff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #007bff;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Tabel */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+        }
+
+        td {
+            background-color: #f4f4f4;
+            color: #555;
+            font-size: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        td:hover {
+            background-color: #e0e0e0;
+            cursor: pointer;
+        }
+
+        tr:nth-child(odd) td {
+            background-color: #fafafa;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            background: #fff;
+            padding: 15px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            bottom: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        .footer div:hover {
+            color: #0056b3;
+        }
+
+        .footer i {
+            font-size: 20px;
+            display: block;
+        }
+
+        /* Tema Gelap Footer */
+        .footer.dark {
+            background-color: #222;
+        }
+
+        .footer.dark div {
+            color: #f4f4f4;
+        }
+
+        .footer.dark div:hover {
+            color: #66ccff;
+        }
+    </style>
+</head>
+<body class="light">
+    <!-- Panel Admin -->
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <textarea id="question-input" placeholder="Masukkan soal dalam format JSON"></textarea>
+        <button id="import-questions">Impor Soal</button>
+
+        <h3>Nilai Siswa</h3>
+        <input type="text" id="search-student" placeholder="Cari nama siswa...">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Siswa</th>
+                    <th>Nilai</th>
+                    <th>Mata Pelajaran</th>
+                </tr>
+            </thead>
+            <tbody id="score-table"></tbody>
+        </table>
+
+        <div class="action-buttons">
+            <button id="clear-scores">Hapus Nilai</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </div>
+        <div onclick="goToPage('system-sisbam.html')">
+            <i class="fas fa-fingerprint"></i>
+            <span>Admin Menu</span>
+        </div>
+        <div onclick="goToPage('pengaturan.html')">
+            <i class="fas fa-cog"></i>
+            <span>Pengaturan</span>
+        </div>
+        <div onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
+            <span>Ubah Tema</span>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi Navigasi
+        function goToPage(url) {
+            window.location.href = url;
+        }
+
+        // Fungsi untuk mengganti tema
+        function toggleTheme() {
+            const currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.classList.remove(currentTheme);
+            document.body.classList.add(newTheme);
+
+            // Simpan tema yang dipilih di localStorage
+            localStorage.setItem('theme', newTheme);
+            updateFooterTheme(newTheme);
+        }
+
+        // Mengubah tema footer
+        function updateFooterTheme(theme) {
+            const footer = document.querySelector('.footer');
+            if (theme === 'dark') {
+                footer.classList.add('dark');
+            } else {
+                footer.classList.remove('dark');
+            }
+        }
+
+        // Mengecek tema yang dipilih dari localStorage saat halaman dimuat
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.add(savedTheme);
+            updateFooterTheme(savedTheme);
+        }
+
+        let scores = JSON.parse(localStorage.getItem("scores") || "[]");
+
+        // Fungsi Impor Soal
+        document.getElementById("import-questions").addEventListener("click", () => {
+            const input = document.getElementById("question-input").value;
+            try {
+                const questions = JSON.parse(input);
+                if (!Array.isArray(questions)) {
+                    throw new Error("Format JSON harus berupa array.");
+                }
+                localStorage.setItem("questions", JSON.stringify(questions));
+                alert("Soal berhasil diimpor!");
+                document.getElementById("question-input").value = "";
+            } catch (error) {
+                alert(`Kesalahan: ${error.message}`);
+            }
+        });
+
+        // Menampilkan Nilai Siswa
+        function loadScores(filter = "") {
+            const scoreTable = document.getElementById("score-table");
+            scoreTable.innerHTML = "";
+
+            const filteredScores = scores.filter(score =>
+                score.name.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            if (filteredScores.length === 0) {
+                scoreTable.innerHTML = "<tr><td colspan='3'>Tidak ada data.</td></tr>";
+                return;
+            }
+
+            filteredScores.forEach(score => {
+                const row = `<tr>
+                    <td>${score.name}</td>
+                    <td>${score.score}</td>
+                    <td>${score.subject}</td>
+                </tr>`;
+                scoreTable.innerHTML += row;
+            });
+        }
+
+        // Hapus Semua Nilai
+        document.getElementById("clear-scores").addEventListener("click", () => {
+            if (confirm("Yakin ingin menghapus semua nilai?")) {
+                localStorage.removeItem("scores");
+                scores = [];
+                loadScores();
+                alert("Nilai dihapus.");
+            }
+        });
+
+        // Logout
+        function logout() {
+            localStorage.removeItem("role");
+            location.href = "admin.html";
+        }
+
+        document.getElementById("search-student").addEventListener// Fungsi Pencarian Siswa
+        document.getElementById("search-student").addEventListener("input", (event) => {
+            const searchTerm = event.target.value;
+            loadScores(searchTerm);
+        });
+
+        // Memuat data nilai siswa saat halaman dimuat
+        loadScores();
+
+    </script>
+</body>
+</html>

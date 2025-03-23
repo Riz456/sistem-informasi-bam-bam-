@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        body.dark-mode .header {
+            background-color: #1f1f1f;
+        }
+
+        .header .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header .icons i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .tugas-list {
+            padding: 20px;
+        }
+
+        .tugas-item {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .tugas-item {
+            background-color: #333;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        body.dark-mode .footer {
+            background-color: #1f1f1f;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+
+        .tugas-item .status {
+            font-size: 12px;
+            color: #888;
+        }
+
+        body.dark-mode .tugas-item .status {
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>Sisbam - Tugas</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <!-- Daftar Tugas -->
+    <div class="tugas-list" id="task-list">
+        <!-- Tugas akan ditampilkan di sini -->
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('menu-sisbam.html')"><i class="fas fa-stream"></i> Menu</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk menavigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk menampilkan daftar tugas
+        function displayTasks() {
+            const tasks = JSON.parse(localStorage.getItem('Tugas')) || [];
+            const taskList = document.getElementById('task-list');
+            
+            // Jika tidak ada tugas, tampilkan pesan
+            if (tasks.length === 0) {
+                taskList.innerHTML = '<p>Belum ada tugas yang tersedia.</p>';
+                return;
+            }
+
+            // Tampilkan tugas
+            taskList.innerHTML = tasks.map(task => {
+                return `
+                    <div class="tugas-item">
+                        <h3>${task.title}</h3>
+                        <p>${task.description}</p>
+                        <p class="status">${task.submitted ? 'Tugas sudah dikumpulkan' : 'Tugas belum dikumpulkan'}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        }
+
+        // Menampilkan tugas saat halaman dimuat
+        window.onload = function() {
+            // Set tema berdasarkan localStorage
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-toggle").classList.remove("fa-moon");
+                document.getElementById("theme-toggle").classList.add("fa-sun");
+            }
+
+            // Menampilkan daftar tugas
+            displayTasks();
+        }
+    </script>
+
+</body>
+</html>

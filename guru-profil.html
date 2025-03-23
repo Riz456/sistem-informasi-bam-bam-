@@ -1,0 +1,308 @@
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Profil - SisBam</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+      <style>
+          /* Gaya dari kode pertama */
+          * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+              font-family: Arial, sans-serif;
+          }
+  
+          body {
+              background-color: #f8f9fa;
+              color: #333;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              min-height: 100vh;
+              transition: background-color 0.3s, color 0.3s;
+          }
+  
+          /* Tema Gelap */
+          body.dark-mode {
+              background-color: #121212;
+              color: #ffffff;
+          }
+  
+          body.dark-mode .container {
+              background-color: #1e1e1e;
+              box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+          }
+  
+          body.dark-mode input {
+              background-color: #333;
+              color: #fff;
+          }
+  
+          .header {
+              position: absolute;
+              top: 0;
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              background-color: #fff;
+              padding: 15px;
+              border-bottom: 1px solid #ddd;
+              transition: background-color 0.3s;
+          }
+  
+          body.dark-mode .header {
+              background-color: #1e1e1e;
+              border-bottom: 1px solid #333;
+          }
+  
+          /* Container Profil */
+          .container {
+              width: 90%;
+              max-width: 400px;
+              background: white;
+              padding: 30px;
+              border-radius: 15px;
+              box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+              text-align: center;
+              margin-top: 80px;
+          }
+  
+          .form-group {
+              margin-bottom: 20px;
+              text-align: left;
+          }
+  
+          label {
+              font-weight: bold;
+              display: block;
+              margin-bottom: 8px;
+          }
+  
+          input {
+              width: 100%;
+              padding: 12px;
+              border-radius: 8px;
+              border: 1px solid #ddd;
+              font-size: 16px;
+              transition: all 0.3s;
+          }
+  
+          .btn-submit {
+              background: #007bff;
+              border: none;
+              padding: 12px;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 16px;
+              font-weight: bold;
+              color: white;
+              width: 100%;
+              transition: all 0.3s;
+          }
+  
+          .btn-submit:hover {
+              background: #0056b3;
+              transform: translateY(-2px);
+          }
+  
+          .footer {
+              margin-top: 20px;
+              font-size: 14px;
+              color: #1e1e1e;
+          }
+  
+          body.dark-mode .footer {
+              color: white;
+          }
+  
+          .footer {
+              position: fixed;
+              bottom: 0;
+              width: 100%;
+              background: white;
+              padding: 10px 0;
+              border-top: 1px solid #ddd;
+              display: flex;
+              justify-content: space-around;
+              transition: background-color 0.3s, border-color 0.3s;
+          }
+  
+          body.dark-mode .footer {
+              background-color: #1e1e1e;
+              border-top: 1px solid #333;
+          }
+  
+          .footer div {
+              text-align: center;
+              font-size: 14px;
+          }
+  
+          .footer i {
+              font-size: 18px;
+              display: block;
+          }
+  
+          .user-info {
+              margin-top: 20px;
+              text-align: left;
+          }
+  
+          .user-info p {
+              margin: 10px 0;
+          }
+  
+          .profile-photo {
+              width: 120px;
+              height: 120px;
+              border-radius: 50%;
+              margin-bottom: 20px;
+              object-fit: cover;
+          }
+      </style>
+  </head>
+  <body>
+      <!-- Header -->
+        <!-- Header -->
+      <div class="header">
+          <h2 data-lang="id">SisBam</h2>
+          <h2 data-lang="en" style="display: none;">SisBam</h2>
+          <div class="icons">
+              <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+          </div>
+      </div>
+  
+      <!-- Container Profil -->
+      <div class="container">
+          <h1 data-lang="id">Profil Pengguna</h1>
+          <h1 data-lang="en" style="display: none;">User Profile</h1>
+          
+          <!-- Foto Profil -->
+          <img src="path/to/default-photo.jpg" alt="Foto Profil" class="profile-photo" id="profilePhoto">
+          
+          <div class="user-info">
+              <p>
+                  <strong data-lang="id">Nama Lengkap:</strong>
+                  <strong data-lang="en" style="display: none;">Full Name:</strong>
+                  <span id="fullnameDisplay"></span>
+              </p>
+              <p>
+                  <strong data-lang="id">Alamat:</strong>
+                  <strong data-lang="en" style="display: none;">Address:</strong>
+                  <span id="addressDisplay"></span>
+              </p>
+              <p>
+                  <strong data-lang="id">Nomor Telepon:</strong>
+                  <strong data-lang="en" style="display: none;">Phone Number:</strong>
+                  <span id="phoneDisplay"></span>
+              </p>
+              <p>
+                  <strong data-lang="id">Email:</strong>
+                  <strong data-lang="en" style="display: none;">Email:</strong>
+                  <span id="emailDisplay"></span>
+              </p>
+          </div>
+      </div>
+  
+      <!-- Footer -->
+      <div class="footer">
+          <div onclick="goToPage('guru-beranda.html')">
+              <i class="fas fa-home"></i>
+              <span data-lang="id">Beranda</span>
+              <span data-lang="en" style="display: none;">Home</span>
+          </div>
+          <div onclick="goToPage('guru-menu.html')">
+              <i class="fas fa-stream"></i>
+              <span data-lang="id">Menu</span>
+              <span data-lang="en" style="display: none;">Menu</span>
+          </div>
+          <div onclick="goToPage('profil-sisbam.html')">
+              <i class="fas fa-user"></i>
+              <span data-lang="id">Profil</span>
+              <span data-lang="en" style="display: none;">Profile</span>
+          </div>
+          <div onclick="goToPage('guru-pengaturan.html')">
+              <i class="fas fa-cog"></i>
+              <span data-lang="id">Pengaturan</span>
+              <span data-lang="en" style="display: none;">Settings</span>
+          </div>
+      </div>
+  
+      <script>
+          // Fungsi Tema
+          function toggleTheme() {
+              const body = document.body;
+              const themeToggle = document.getElementById("theme-toggle");
+  
+              body.classList.toggle("dark-mode");
+              
+              if (body.classList.contains("dark-mode")) {
+                  localStorage.setItem("theme", "dark");
+                  themeToggle.classList.replace("fa-moon", "fa-sun");
+              } else {
+                  localStorage.setItem("theme", "light");
+                  themeToggle.classList.replace("fa-sun", "fa-moon");
+              }
+          }
+  
+          // Cek Tema Saat Memuat Halaman
+          document.addEventListener("DOMContentLoaded", () => {
+              const savedTheme = localStorage.getItem("theme");
+              const themeToggle = document.getElementById("theme-toggle");
+              
+              if (savedTheme === "dark") {
+                  document.body.classList.add("dark-mode");
+                  themeToggle.classList.replace("fa-moon", "fa-sun");
+              }
+  
+              // Ambil data pengguna dari localStorage
+              const username = localStorage.getItem("username");
+              const users = JSON.parse(localStorage.getItem('users')) || [];
+              const user = users.find(u => u.username === username);
+  
+              if (user) {
+                  document.getElementById('fullnameDisplay').textContent = user.fullname;
+                  document.getElementById('addressDisplay').textContent = user.address;
+                  document.getElementById('phoneDisplay').textContent = user.phone;
+                  document.getElementById('emailDisplay').textContent = user.email;
+  
+                  // Tampilkan foto profil jika ada
+                  const profilePhoto = user.profilePhoto || "profil.png";
+                  document.getElementById('profilePhoto').src = profilePhoto;
+              } else {
+                  alert('Pengguna tidak ditemukan!');
+              }
+          });
+  
+          // Fungsi untuk menavigasi ke halaman tertentu
+          function goToPage(page) {
+              window.location.href = page;
+          }
+          // Fungsi untuk mengubah bahasa
+  function changeLanguage(lang) {
+      localStorage.setItem("language", lang); // Simpan preferensi bahasa
+      applyLanguage(lang); // Terapkan bahasa yang dipilih
+  }
+  
+  // Fungsi untuk menerapkan bahasa
+  function applyLanguage(lang) {
+      const elements = document.querySelectorAll("[data-lang]");
+      elements.forEach(element => {
+          if (element.getAttribute("data-lang") === lang) {
+              element.style.display = "inline"; // Tampilkan teks sesuai bahasa
+          } else {
+              element.style.display = "none"; // Sembunyikan teks lainnya
+          }
+      });
+  }
+  
+  // Cek preferensi bahasa saat halaman dimuat
+  document.addEventListener("DOMContentLoaded", function () {
+      const savedLanguage = localStorage.getItem("language") || "id"; // Default bahasa Indonesia
+      applyLanguage(savedLanguage); // Terapkan bahasa yang disimpan
+  });
+      </script>
+  </body>
+  </html>

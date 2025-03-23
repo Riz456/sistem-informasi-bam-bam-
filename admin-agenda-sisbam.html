@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Tambah Agenda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS yang sama seperti sebelumnya */
+        .admin-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .admin-container h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #498;
+        }
+
+        .admin-form {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .admin-form input,
+        .admin-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .admin-form button {
+            background: #498;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .admin-form button:hover {
+            background: #366;
+        }
+
+        .agenda-list {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .agenda-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .agenda-item:last-child {
+            border-bottom: none;
+        }
+
+        .agenda-item h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .agenda-item p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .agenda-item button {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .agenda-item button:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam Admin Agenda</h2>
+    </div>
+
+    <!-- Konten Admin -->
+    <div class="admin-container">
+        <h1>Tambah Agenda Baru</h1>
+        <div class="admin-form">
+            <input type="text" id="agenda-title" placeholder="Judul Agenda">
+            <input type="text" id="agenda-date" placeholder="Tanggal Agenda">
+            <textarea id="agenda-description" placeholder="Deskripsi Agenda"></textarea>
+            <input type="text" id="agenda-link" placeholder="Link Tujuan (opsional)">
+            <button onclick="tambahAgenda()">Tambah Agenda</button>
+        </div>
+
+        <!-- Daftar Agenda -->
+        <div class="agenda-list">
+            <h2>Daftar Agenda</h2>
+            <div id="daftar-agenda">
+                <!-- Daftar agenda akan diisi oleh JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk menambahkan agenda baru
+        function tambahAgenda() {
+            const title = document.getElementById("agenda-title").value;
+            const date = document.getElementById("agenda-date").value;
+            const description = document.getElementById("agenda-description").value;
+            const link = document.getElementById("agenda-link").value;
+
+            if (!title || !date || !description) {
+                alert("Judul, tanggal, dan deskripsi wajib diisi!");
+                return;
+            }
+
+            // Simpan agenda ke localStorage
+            const agenda = {
+                id: Date.now(), // ID unik berdasarkan timestamp
+                title,
+                date,
+                description,
+                link
+            };
+
+            let agendas = JSON.parse(localStorage.getItem("agendas")) || [];
+            agendas.push(agenda);
+            localStorage.setItem("agendas", JSON.stringify(agendas));
+
+            alert("Agenda berhasil ditambahkan!");
+            document.getElementById("agenda-title").value = "";
+            document.getElementById("agenda-date").value = "";
+            document.getElementById("agenda-description").value = "";
+            document.getElementById("agenda-link").value = "";
+
+            // Perbarui daftar agenda
+            tampilkanAgenda();
+        }
+
+        // Fungsi untuk menampilkan daftar agenda
+        function tampilkanAgenda() {
+            const agendas = JSON.parse(localStorage.getItem("agendas")) || [];
+            const daftarAgenda = document.getElementById("daftar-agenda");
+
+            if (agendas.length === 0) {
+                daftarAgenda.innerHTML = "<p>Tidak ada agenda yang tersedia.</p>";
+                return;
+            }
+
+            daftarAgenda.innerHTML = agendas.map(agenda => `
+                <div class="agenda-item">
+                    <div>
+                        <h3>${agenda.title}</h3>
+                        <p>${agenda.date}</p>
+                        <p>${agenda.description}</p>
+                        ${agenda.link ? `<a href="${agenda.link}" target="_blank">Buka Link</a>` : ""}
+                    </div>
+                    <button onclick="hapusAgenda(${agenda.id})">Hapus</button>
+                </div>
+            `).join("");
+        }
+
+        // Fungsi untuk menghapus agenda
+        function hapusAgenda(id) {
+            let agendas = JSON.parse(localStorage.getItem("agendas")) || [];
+            agendas = agendas.filter(agenda => agenda.id !== id);
+            localStorage.setItem("agendas", JSON.stringify(agendas));
+
+            alert("Agenda berhasil dihapus!");
+            tampilkanAgenda();
+        }
+
+        // Tampilkan agenda saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", tampilkanAgenda);
+    </script>
+
+</body>
+</html>

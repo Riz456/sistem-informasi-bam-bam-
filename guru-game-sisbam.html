@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisBam - Menu - Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        /* Header dengan efek blur */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .header {
+            background: rgba(30, 30, 30, 0.8);
+            border-bottom: 1px solid #333;
+        }
+
+       .header h2 {
+            margin: 0;
+            font-family: 'Audiowide', sans-serif;
+        }
+
+        .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icons i {
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .icons i:hover {
+            transform: scale(1.2);
+        }
+
+        /* Banner Selamat Datang */
+        .banner {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+            margin: 15px;
+        }
+
+        body.dark-mode .banner {
+            background: linear-gradient(to right, #1e1e1e, #333);
+        }
+
+        /* Menu Lainnya */
+        .menu-lainnya {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .menu-item {
+            padding: 20px;
+            text-align: center;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #f1f1f1;
+            transform: translateY(-5px);
+        }
+
+        .menu-item i {
+            font-size: 35px;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .menu-item span {
+            display: block;
+            font-weight: bold;
+        }
+
+        body.dark-mode .menu-item {
+            background: #1e1e1e;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .menu-item:hover {
+            background: #333;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+
+        /* Loading Animation Modern */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        body.dark-mode #loading {
+            background-color: rgba(30, 30, 30, 0.95);
+        }
+
+        #loading p {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        body.dark-mode #loading p {
+            color: #00f2fe;
+        }
+
+        .loader {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #007bff,
+                #00f2fe,
+                #007bff
+            );
+            animation: rotate 2s linear infinite;
+            filter: blur(10px);
+        }
+
+        .gradient:nth-child(2) {
+            animation-delay: -0.66s;
+        }
+
+        .gradient:nth-child(3) {
+            animation-delay: -1.33s;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Animation -->
+    <div id="loading">
+        <div class="loader">
+            <div class="gradient"></div>
+            <div class="gradient"></div>
+            <div class="gradient"></div>
+        </div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam - Game</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-envelope" onclick="openEmail()"></i>
+            <i class="fas fa-bell" onclick="openNotifications()"></i>
+        </div>
+    </div>
+
+    <!-- Banner Selamat Datang -->
+    <div class="banner" id="sambutan">
+        Selamat datang di menu game
+    </div>
+
+    <!-- Menu Lainnya -->
+    <div class="menu-lainnya">
+        <div class="menu-item" onclick="goToPage('mtk-sisbam.html')">
+            <i class="fas fa-square-root-alt"></i>
+            <span>Game Matematika</span>
+        </div>
+        <div class="menu-item" onclick="goToPage('ips-sisbam.html')">
+            <i class="fas fa-landmark"></i>
+            <span>Game Sejarah Indonesia</span>
+        </div>
+        <div class="menu-item" onclick="goToPage('memori-sisbam.html')">
+            <i class="fas fa-brain"></i>
+            <span>Game Memori</span>
+        </div>
+        <div class="menu-item" onclick="goToPage('logic-sisbam.html')">
+            <i class="fas fa-question-circle"></i>
+            <span>Game Logika</span>
+        </div>
+        <div class="menu-item" onclick="goToPage('papan-skor-sisbam.html')">
+            <i class="fas fa-crown"></i>
+            <span>Skor Game</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+     <div class="footer">
+        <div onclick="goToPage('guru-beranda.html')">
+            <i class="fas fa-home"></i>
+            <span data-lang="id">Beranda</span>
+            <span data-lang="en" style="display: none;">Home</span>
+        </div>
+        <div onclick="goToPage('guru-menu.html')">
+            <i class="fas fa-stream"></i>
+            <span data-lang="id">Menu</span>
+            <span data-lang="en" style="display: none;">Categories</span>
+        </div>
+        <div onclick="goToPage('guru-profil.html')">
+            <i class="fas fa-user"></i>
+            <span data-lang="id">Profil</span>
+            <span data-lang="en" style="display: none;">Profile</span>
+        </div>
+        <div onclick="goToPage('guru-pengaturan.html')">
+            <i class="fas fa-cog"></i>
+            <span data-lang="id">Pengaturan</span>
+            <span data-lang="en" style="display: none;">Settings</span>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let username = localStorage.getItem("username");
+            if (username) {
+                document.getElementById("sambutan").innerText = `Selamat datang di halaman Game, ${username}`;
+            }
+        });
+
+        function openEmail() {
+            window.location.href = "email.html";
+        }
+
+        function openNotifications() {
+            window.location.href = "pengumuman-sisbam.html";
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-toggle").classList.replace("fa-moon", "fa-sun");
+            }
+        });
+
+        // Kontrol animasi loading
+        document.addEventListener("DOMContentLoaded", function () {
+            const loading = document.getElementById("loading");
+            loading.style.opacity = "0";
+            setTimeout(() => {
+                loading.style.display = "none";
+            }, 300);
+        });
+
+        window.addEventListener("beforeunload", function () {
+            const loading = document.getElementById("loading");
+            loading.style.display = "flex";
+            loading.style.opacity = "1";
+        });
+    </script>
+
+</body>
+</html>

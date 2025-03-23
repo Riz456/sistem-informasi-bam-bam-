@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisBam - Kontak</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark-mode {
+            background-color: #121212;
+            color: #f8f8f8;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icons i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .contact-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #007bff;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Button Social Media */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-buttons a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            padding: 10px 20px;
+            background-color: #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .social-buttons a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #fff;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+
+        /* Tema gelap untuk footer */
+        body.dark-mode .footer {
+            background-color: #1f1f1f;
+        }
+
+        body.dark-mode .footer div {
+            color: #f8f8f8;
+        }
+
+        /* Tema gelap untuk header */
+        body.dark-mode .header {
+            background-color: #333;
+            color: #fff;
+        }
+
+        body.dark-mode .icons i {
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>SisBam</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-envelope" onclick="openEmail()"></i>
+            <i class="fas fa-bell" onclick="openNotifications()"></i>
+        </div>
+    </div>
+
+    <!-- Form Kontak -->
+    <div class="contact-form">
+        <h2>Hubungi Kami</h2>
+        <form>
+            <input type="text" placeholder="Nama Anda" required>
+            <input type="email" placeholder="Email Anda" required>
+            <textarea placeholder="Pesan Anda" rows="5" required></textarea>
+            <button type="submit">Kirim Pesan</button>
+        </form>
+    </div>
+
+    <!-- Social Media Buttons -->
+    <div class="social-buttons">
+        <a href="https://www.tiktok.com" target="_blank" title="TikTok">
+            <i class="fab fa-tiktok"></i>
+            TikTok
+        </a>
+        <a href="https://www.instagram.com" target="_blank" title="Instagram">
+            <i class="fab fa-instagram"></i>
+            Instagram
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('menu-sisbam.html')"><i class="fas fa-stream"></i> Menu</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            // Implementasikan menu toggle jika perlu
+        }
+
+        function openEmail() {
+            window.location.href = "blank.html";
+        }
+
+        function openNotifications() {
+            window.location.href = "pengumuman-sisbam.html";
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        });
+
+        function goToPage(page) {
+            window.location.href = page;
+        }
+    </script>
+
+</body>
+</html>

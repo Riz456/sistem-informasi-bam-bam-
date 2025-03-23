@@ -1,0 +1,388 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bam Bam Studio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }body.light {
+        background-color: white;
+        color: black;
+    }
+
+    body.dark {
+        background-color: #333;
+        color: white;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        background-color: #49243E;
+        color: white;
+        padding: 10px 20px;
+    }
+
+    .header .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 1.5em;
+        font-weight: normal;
+        margin-left: 10px;
+    }
+
+    .header .hologram {
+        font-size: 1.5em;
+        font-weight: bold;
+        background: linear-gradient(90deg, white, #7873f5, #42e695, #ff6ec4);
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: hologram 8s infinite;
+        margin-left: 10px;
+    }
+
+    .hamburger {
+        position: relative;
+        cursor: pointer;
+        z-index: 3;
+        width: 30px;
+        height: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.3s ease;
+        margin-left: auto;
+    }
+
+    .hamburger div {
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        transition: transform 0.3s ease;
+    }
+
+    .hamburger.active div:nth-child(1) {
+        transform: translateY(5px) rotate(45deg);
+    }
+
+    .hamburger.active div:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active div:nth-child(3) {
+        transform: translateY(-5px) rotate(-45deg);
+    }
+
+    .menu {
+        width: 250px;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -250px;
+        background-color: rgba(73, 36, 62, 0.8);
+        padding-top: 60px;
+        transition: right 0.3s ease;
+        z-index: 2;
+    }
+
+    .menu.active {
+        right: 0;
+    }
+
+    .menu a, .menu .theme-toggle {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 18px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .menu a:hover, .menu .theme-toggle:hover {
+        background-color: #4547;
+    }
+
+    .menu i {
+        font-size: 18px;
+    }
+
+    .submenu {
+        display: none;
+        background-color: rgba(73, 36, 62, 0.8);
+        padding-left: 20px;
+    }
+
+    .submenu.active {
+        display: block;
+    }
+
+    .submenu a {
+        padding: 10px 20px;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+    }
+
+    .submenu a:hover {
+        background-color: #4547;
+    }
+
+    .marquee-container {
+    width: 100%;
+    overflow: hidden;
+    background-color: #f0f9;
+    white-space: nowrap;
+    box-sizing: border-box;
+    padding: 10px 20px;
+}
+
+.marquee {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee linear infinite;
+    color: white;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+    .footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #49243E;
+        color: #f8f8f8;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .images-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 20px;
+        color: #49243E;
+    }
+
+    .documentation-images-container {
+        display: flex;
+        overflow: hidden;
+        padding: 20px;
+        margin-top: 20px;
+        justify-content: center;
+    }
+
+    .documentation-images {
+        display: flex;
+        animation: scrollImages 40s linear infinite;
+    }
+
+    .documentation-images img {
+        width: 400px;
+        height: auto;
+        margin-right: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes scrollImages {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .documentation-images img {
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        .documentation-images-container {
+            padding: 10px;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        body {
+            font-size: 120%;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+
+        .header img {
+            width: 80px;
+        }
+    }
+    
+    @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+    body.dark .images-title {
+        color: white;
+    }
+
+    body.dark .menu a,
+    body.dark .menu .theme-toggle {
+        color: white;
+    }
+
+    body.dark .footer {
+        color: white;
+    }
+
+</style>
+
+</head>
+<body class="light">
+    <div class="header">
+        <div class="logo-container">
+            <img src="bm.png" alt="Logo" style="width: 60px; margin-right: 10px;">
+        </div>
+        <h1 class="hologram">Bam Bam Studio™</h1>
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div><div class="menu" id="menu">
+    <a href="indeks.html"><i class="fas fa-home"></i> Beranda</a>
+    <a href="event.html"><i class="fas fa-calendar"></i> Event</a>
+    <a href="#" class="about"><i class="fas fa-info-circle"></i> Aplikasi <i class="fas fa-caret-down"></i></a>
+    <div class="submenu" id="about-submenu">
+         <a href="login-sisbam.html"><i class="fas fa-user-group" ></i> sisbam </a>
+         <a href="login-sispus.html"><i class="fas fa-seedling" ></i> Litbam </a>
+         <a href="cbt-sisbam.html"><i class="fas fa-book"></i> CBT System</a>
+    </div>
+     <a href="setings.html"><i class="fas fa-gears"></i> Pengaturan</a>
+</div>
+<div class="marquee-container">
+    <div class="marquee" id="marqueeText">
+        Mohon maaf jika banyak sekali bug, kami masih berusaha memperbaikinya :)
+    </div>
+</div>
+
+<script>
+    // Ambil teks marquee dari localStorage atau gunakan teks default
+const marqueeMessages = JSON.parse(localStorage.getItem("marqueeMessages")) || [
+    "Mohon maaf jika banyak sekali bug, kami masih berusaha memperbaikinya :)",
+    "Selamat datang di Bam Bam Studio™!",
+    "Kami terus meningkatkan pengalaman pengguna.",
+    "Terima kasih atas kesabaran Anda."
+];
+
+// Variabel untuk melacak indeks teks
+let marqueeIndex = 0;
+
+function updateMarqueeText() {
+    const marqueeText = document.getElementById("marqueeText");
+
+    if (!marqueeText) {
+        console.error("Elemen dengan ID 'marqueeText' tidak ditemukan!");
+        return;
+    }
+
+    // Set teks saat ini
+    const currentMessage = marqueeMessages[marqueeIndex];
+    marqueeText.textContent = currentMessage;
+
+    // Hitung panjang teks dan sesuaikan durasi animasi
+    const textLength = currentMessage.length;
+    const baseDuration = 20; // Durasi dasar dalam detik untuk teks pendek
+    const duration = Math.max(baseDuration, textLength / 10); // Tambahkan durasi untuk teks lebih panjang
+
+    // Terapkan durasi animasi ke elemen marquee
+    marqueeText.style.animationDuration = `${duration}s`;
+
+    // Update indeks ke teks berikutnya
+    marqueeIndex = (marqueeIndex + 1) % marqueeMessages.length;
+
+    // Menunggu sampai animasi selesai sebelum mengganti teks
+    setTimeout(updateMarqueeText, duration * 1000);
+}
+
+// Jalankan fungsi untuk memperbarui teks marquee
+updateMarqueeText();
+</script>
+
+<div class="images-title">Daftar Agenda</div>
+
+<div class="documentation-images-container">
+    <div class="documentation-images" id="imagesContainer">
+        <img src="book.png" alt="dokumen">
+        <img src="it.png" alt="dokumen">
+        <img src="it.png" alt="dokumen">
+        <img src="it.png" alt="dokumen">
+    </div>
+</div>
+
+<div class="footer">
+    Bam Bam Studio™. All rights reserved.
+</div>
+
+
+<script>
+    function toggleMenu() {
+        var menu = document.getElementById('menu');
+        var hamburger = document.querySelector('.hamburger');
+        menu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle("dark");
+        document.body.classList.toggle("light");
+        const marqueeText = document.getElementById("marqueeText");
+        if (document.body.classList.contains("dark")) {
+            marqueeText.textContent = "Sekarang kamu berada di tampilan gelap.";
+        } else {
+            marqueeText.textContent = "HEBAT!!Kamu berada diwebsite uji coba ";""
+        }
+    }
+    // Ambil status tema dari localStorage
+const currentTheme = localStorage.getItem('theme');
+
+// Atur tema saat halaman dimuat
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark');
+    document.body.classList.remove('light');
+} else {
+    document.body.classList.add('light');
+    document.body.classList.remove('dark');
+}
+
+    // Fungsi untuk toggle submenu About
+    document.querySelector('.about').addEventListener('click', function() {
+        var submenu = document.getElementById('about-submenu');
+        submenu.classList.toggle('active');
+    });
+</script>
+
+</body>
+</html>

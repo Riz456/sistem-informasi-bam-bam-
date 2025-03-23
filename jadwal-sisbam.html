@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisBam - Jadwal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body.dark-mode .header {
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-mode .table-container {
+            background: #1e1e1e;
+            border: 1px solid #333;
+        }
+
+        body.dark-mode th,
+        body.dark-mode td {
+            border: 1px solid #444;
+            color: #ffffff;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-family: 'Audiowide', sans-serif;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header .icons i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .header .clock {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Banner */
+        .banner {
+            background-color: #e3f2fd;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .banner {
+            background-color: #333;
+        }
+
+        /* Tabel Jadwal */
+        .table-container {
+            max-width: 90%;
+            margin: 20px auto;
+            overflow-x: auto;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        body.dark-mode th {
+            background: #0056b3;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam - Jadwal</h2>
+        <div class="icons">
+            <span class="clock" id="clock"></span>
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <!-- Banner Ucapan Selamat Datang -->
+    <div class="banner" id="sambutan">
+        Selamat datang di halaman Jadwal, <span id="username"></span>!
+    </div>
+
+    <!-- Tabel Jadwal -->
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Hari</th>
+                <th>Jam</th>
+                <th>Mata Pelajaran</th>
+                <th>Guru</th>
+                <th>Ruangan</th>
+            </tr>
+            <tr>
+                <td>Senin</td>
+                <td>07:00 - 08:30</td>
+                <td>Agama, Ips, Bahasa Indonesia</td>
+                <td>Pak Budi</td>
+                <td>Ruang 101</td>
+            </tr>
+            <tr>
+                <td>Selasa</td>
+                <td>08:30 - 10:00</td>
+                <td>Bahasa Indonesia</td>
+                <td>Bu Siti</td>
+                <td>Ruang 102</td>
+            </tr>
+            <tr>
+                <td>Rabu</td>
+                <td>10:30 - 12:00</td>
+                <td>Fisika</td>
+                <td>Pak Roni</td>
+                <td>Ruang 103</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('menu-sisbam.html')"><i class="fas fa-stream"></i> Menu</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk menavigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Menampilkan nama pengguna
+        document.addEventListener("DOMContentLoaded", function () {
+            let username = localStorage.getItem("username") || "Pengguna";
+            document.getElementById("username").innerText = username;
+        });
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        }
+
+        // Cek preferensi tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            const themeToggle = document.getElementById("theme-toggle");
+
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            }
+        });
+
+        // Fungsi untuk menampilkan jam
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const clockElement = document.getElementById('clock');
+            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Memperbarui jam setiap detik
+        setInterval(updateClock, 1000);
+
+        // Menampilkan jam saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", updateClock);
+    </script>
+</body>
+</html>

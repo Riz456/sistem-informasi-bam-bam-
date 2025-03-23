@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Kelola Marquee</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #49243E;
+        }
+        .form-container, .list-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container label, .list-container h2 {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .form-container textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-container button, .list-container button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #49243E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-container button:hover, .list-container button:hover {
+            background-color: #333;
+        }
+        .list-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .list-container ul li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .list-container ul li button {
+            background-color: #ff4d4d;
+            margin-left: 10px;
+        }
+        .list-container ul li button:hover {
+            background-color: #d93636;
+        }
+    </style>
+</head>
+<body>
+    <h1>Kelola Teks Marquee</h1>
+
+    <!-- Form untuk menambahkan teks -->
+    <div class="form-container">
+        <label for="marqueeText">Teks Marquee Baru:</label>
+        <textarea id="marqueeText"></textarea>
+        <button onclick="addMarquee()">Tambah</button>
+    </div>
+
+    <!-- Daftar teks marquee -->
+    <div class="list-container">
+        <h2>Riwayat Teks Marquee</h2>
+        <ul id="marqueeList"></ul>
+    </div>
+
+    <script>
+        // Fungsi untuk memuat teks marquee dari localStorage
+        function loadMarquee() {
+            const marqueeMessages = JSON.parse(localStorage.getItem("marqueeMessages")) || [];
+            const marqueeList = document.getElementById("marqueeList");
+
+            marqueeList.innerHTML = ""; // Kosongkan daftar
+            marqueeMessages.forEach((message, index) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+                    <span>${message}</span>
+                    <button onclick="deleteMarquee(${index})">Hapus</button>
+                `;
+                marqueeList.appendChild(listItem);
+            });
+        }
+
+        // Fungsi untuk menambahkan teks marquee
+        function addMarquee() {
+            const newText = document.getElementById("marqueeText").value.trim();
+            if (newText === "") {
+                alert("Teks tidak boleh kosong!");
+                return;
+            }
+
+            // Tambahkan teks baru ke localStorage
+            const marqueeMessages = JSON.parse(localStorage.getItem("marqueeMessages")) || [];
+            marqueeMessages.push(newText);
+            localStorage.setItem("marqueeMessages", JSON.stringify(marqueeMessages));
+
+            alert("Teks berhasil ditambahkan!");
+            document.getElementById("marqueeText").value = ""; // Kosongkan textarea
+            loadMarquee(); // Perbarui daftar teks
+        }
+
+        // Fungsi untuk menghapus teks marquee berdasarkan indeks
+        function deleteMarquee(index) {
+            const marqueeMessages = JSON.parse(localStorage.getItem("marqueeMessages")) || [];
+            marqueeMessages.splice(index, 1); // Hapus teks dari array
+            localStorage.setItem("marqueeMessages", JSON.stringify(marqueeMessages));
+
+            alert("Teks berhasil dihapus!");
+            loadMarquee(); // Perbarui daftar teks
+        }
+
+        // Muat teks saat halaman dimuat
+        loadMarquee();
+    </script>
+</body>
+</html>

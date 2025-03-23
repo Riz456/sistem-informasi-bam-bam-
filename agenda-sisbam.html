@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS yang sama seperti sebelumnya */
+          * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Tema Gelap */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
+}
+
+.header h2 {
+    margin: 0;
+    font-family: 'Audiowide', sans-serif;
+    font-size: 24px;
+    color: #333;
+}
+
+.header .icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.header .icons i {
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.header .icons i:hover {
+    color: #498;
+}
+
+/* Konten Agenda */
+.agenda-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.agenda-container h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #498;
+}
+
+.agenda-item {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.agenda-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.agenda-item h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.agenda-item p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.agenda-item .date {
+    font-weight: bold;
+    color: #498;
+    margin-bottom: 10px;
+}
+
+/* Dark mode */
+body.dark-mode .agenda-item {
+    background: #1e1e1e;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .agenda-item h2 {
+    color: #fff;
+}
+
+body.dark-mode .agenda-item p {
+    color: #ccc;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.footer div {
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.footer div:hover {
+    color: #498;
+}
+
+.footer i {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Dark mode untuk footer */
+body.dark-mode .footer {
+    background: #1e1e1e;
+    border-top: 1px solid #333;
+}
+
+body.dark-mode .footer div {
+    color: #ccc;
+}
+
+body.dark-mode .footer div:hover {
+    color: #498;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam</h2>
+    </div>
+
+    <!-- Konten Agenda -->
+    <div class="agenda-container">
+        <h1>Agenda Kegiatan</h1>
+        <div id="daftar-agenda">
+            <!-- Daftar agenda akan diisi oleh JavaScript -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('menu-sisbam.html')"><i class="fas fa-stream"></i> Menu</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk menampilkan daftar agenda
+        function tampilkanAgenda() {
+            const agendas = JSON.parse(localStorage.getItem("agendas")) || [];
+            const daftarAgenda = document.getElementById("daftar-agenda");
+
+            if (agendas.length === 0) {
+                daftarAgenda.innerHTML = "<p>Tidak ada agenda yang tersedia.</p>";
+                return;
+            }
+
+            daftarAgenda.innerHTML = agendas.map(agenda => `
+                <div class="agenda-item" onclick="bukaAgenda('${agenda.link || '#'}')">
+                    <h2>${agenda.title}</h2>
+                    <p class="date">${agenda.date}</p>
+                    <p>${agenda.description}</p>
+                </div>
+            `).join("");
+        }
+
+        // Fungsi untuk membuka agenda
+        function bukaAgenda(link) {
+            if (link && link !== "#") {
+                window.location.href = link;
+            } else {
+                alert("Tidak ada link tujuan yang tersedia.");
+            }
+        }
+
+        // Fungsi untuk navigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Tampilkan agenda saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", tampilkanAgenda);
+    </script>
+
+</body>
+</html>

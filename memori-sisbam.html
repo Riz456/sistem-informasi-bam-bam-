@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Memori - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        /* Container Game */
+        .game-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Level Selector */
+        .level-selector {
+            margin-bottom: 1rem;
+        }
+
+        .level-selector label {
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        .level-selector select {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        /* Grid Kartu */
+        .memory-grid {
+            display: grid;
+            gap: 10px;
+            margin: 1rem auto;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: transparent;
+            cursor: pointer;
+            transform: rotateY(180deg);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease, background 0.3s ease;
+            position: relative;
+            aspect-ratio: 1;
+        }
+
+        .card.flipped {
+            transform: rotateY(0deg);
+            background: #ffeb3b;
+            color: #333;
+        }
+
+        .card.matched {
+            background: #4caf50;
+            color: white;
+            cursor: default;
+            transform: rotateY(0deg);
+        }
+
+        .card::before {
+            content: "?";
+            position: absolute;
+            font-size: 1.5rem;
+            color: #333;
+            backface-visibility: hidden;
+        }
+
+        .card.flipped::before {
+            content: "";
+        }
+
+        /* Timer dan Skor */
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Tombol Reset */
+        .reset-button {
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .reset-button:hover {
+            background: #f50057;
+        }
+
+        /* Kontrol Musik */
+        .music-controls {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .music-controls button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .music-controls button:hover {
+            background: #45a049;
+        }
+
+        .music-controls input[type="range"] {
+            width: 100px;
+            cursor: pointer;
+        }
+
+        /* Animasi */
+        @keyframes flip {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(180deg); }
+        }
+
+        @keyframes match {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .card.matched {
+            animation: match 0.5s ease;
+        }
+
+        /* Animasi Hitungan Mundur */
+        .countdown {
+            font-size: 3rem;
+            font-weight: bold;
+            animation: zoomInOut 1s infinite;
+        }
+
+        @keyframes zoomInOut {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Game Memori</h1>
+        
+        <!-- Level Selector -->
+        <div class="level-selector">
+            <label for="level">Pilih Level:</label>
+            <select id="level" onchange="startGame()">
+                <option value="4">Mudah (4x4)</option>
+                <option value="6">Sedang (6x6)</option>
+                <option value="8">Sulit (8x8)</option>
+            </select>
+        </div>
+
+        <!-- Timer dan Skor -->
+        <div class="game-info">
+            <div>Waktu: <span id="timer">60</span>s</div>
+            <div>Skor: <span id="score">0</span></div>
+        </div>
+
+        <!-- Grid Kartu -->
+        <div class="memory-grid" id="memory-grid"></div>
+
+        <!-- Tombol Reset -->
+        <button class="reset-button" onclick="resetGame()">Reset Game</button>
+
+        <!-- Kontrol Musik -->
+        <div class="music-controls">
+            <button id="play-pause-button" onclick="toggleMusic()">
+                <i class="fas fa-play"></i>
+            </button>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" oninput="setVolume(this.value)">
+        </div>
+
+        <!-- Hitungan Mundur -->
+        <div id="countdown" class="countdown" style="display: none;">Are you ready?</div>
+    </div>
+
+    <!-- Efek Suara -->
+    <audio id="flip-sound" src="https://assets.mixkit.co/active_storage/sfx/2457/2457-preview.mp3"></audio>
+    <audio id="match-sound" src="https://assets.mixkit.co/active_storage/sfx/1084/1084-preview.mp3"></audio>
+    <audio id="game-over-sound" src="https://assets.mixkit.co/active_storage/sfx/2591/2591-preview.mp3"></audio>
+    <audio id="background-music" loop>
+        <source src="2-cherry.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung audio.
+    </audio>
+
+    <script>
+        const memoryGrid = document.getElementById('memory-grid');
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('timer');
+        const levelSelector = document.getElementById('level');
+        const playPauseButton = document.getElementById('play-pause-button');
+        const backgroundMusic = document.getElementById('background-music');
+        const countdownElement = document.getElementById('countdown');
+        let cards = [];
+        let flippedCards = [];
+        let score = 0;
+        let timer;
+        let timeLeft = 60;
+
+        // Daftar ikon untuk kartu
+        const icons = [
+            '🍎', '🍌', '🍇', '🍓', '🍒', '🍑', '🍍', '🥭',
+            '🍊', '🍋', '🍉', '🥥', '🥝', '🍏', '🍈', '🍐',
+            '🍎', '🍌', '🍇', '🍓', '🍒', '🍑', '🍍', '🥭',
+            '🍊', '🍋', '🍉', '🥥', '🥝', '🍏', '🍈', '🍐'
+        ];
+
+        // Acak urutan ikon
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Buat kartu
+        function createCards(level) {
+            const gridSize = level * level;
+            const selectedIcons = icons.slice(0, gridSize / 2);
+            const cardIcons = [...selectedIcons, ...selectedIcons];
+            shuffleArray(cardIcons);
+
+            memoryGrid.innerHTML = '';
+            memoryGrid.style.gridTemplateColumns = `repeat(${level}, 1fr)`;
+            memoryGrid.style.gridTemplateRows = `repeat(${level}, 1fr)`;
+
+            cardIcons.forEach(icon => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.textContent = icon;
+                card.addEventListener('click', flipCard);
+                memoryGrid.appendChild(card);
+                cards.push(card);
+            });
+        }
+
+        // Tampilkan semua kartu selama beberapa detik sebelum permainan dimulai
+        function showCardsBeforeStart() {
+            cards.forEach(card => {
+                card.classList.add('flipped');
+            });
+
+            setTimeout(() => {
+                cards.forEach(card => {
+                    card.classList.remove('flipped');
+                });
+                startCountdown();
+            }, 3000); // Kartu akan ditampilkan selama 3 detik sebelum ditutup
+        }
+
+        // Hitungan mundur sebelum permainan dimulai
+        function startCountdown() {
+            let count = 3;
+            countdownElement.style.display = 'block';
+            countdownElement.textContent = "Are you ready?";
+
+            const countdownInterval = setInterval(() => {
+                if (count > 0) {
+                    countdownElement.textContent = count;
+                    count--;
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownElement.style.display = 'none';
+                    startTimer();
+                }
+            }, 1000);
+        }
+
+        // Balik kartu
+        function flipCard() {
+            if (flippedCards.length < 2 && !this.classList.contains('flipped')) {
+                this.classList.add('flipped');
+                flippedCards.push(this);
+                document.getElementById('flip-sound').play();
+
+                if (flippedCards.length === 2) {
+                    checkMatch();
+                }
+            }
+        }
+
+        // Cek kecocokan kartu
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+
+            if (card1.textContent === card2.textContent) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                score += 10;
+                scoreElement.textContent = score;
+                flippedCards = [];
+                document.getElementById('match-sound').play();
+
+                if (document.querySelectorAll('.matched').length === cards.length) {
+                    clearInterval(timer);
+                    alert(`Selamat! Skor Anda: ${score}`);
+                    resetGame();
+                }
+            } else {
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+        // Timer
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.getElementById('game-over-sound').play();
+                    alert("Waktu habis! Anda kalah.");
+                    resetGame();
+                }
+            }, 1000);
+        }
+
+        // Reset game
+        function resetGame() {
+            clearInterval(timer);
+            cards = [];
+            flippedCards = [];
+            score = 0;
+            timeLeft = 60;
+            scoreElement.textContent = score;
+            timerElement.textContent = timeLeft;
+            createCards(parseInt(levelSelector.value));
+            showCardsBeforeStart();
+        }
+
+        // Mulai game
+        function startGame() {
+            resetGame();
+        }
+
+        // Kontrol Musik
+        function toggleMusic() {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                backgroundMusic.pause();
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+
+        function setVolume(volume) {
+            backgroundMusic.volume = volume;
+        }
+
+        // Inisialisasi game
+        startGame();
+    </script>
+</body>
+</html>

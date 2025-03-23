@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Absen - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        body.dark-mode .header {
+            background-color: #1f1f1f;
+        }
+
+        .header .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header .icons i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .admin-section {
+            padding: 20px;
+        }
+
+        .absen-list {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        body.dark-mode .absen-list {
+            background-color: #333;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        body.dark-mode .footer {
+            background-color: #1f1f1f;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+
+        .absen-item {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark-mode .absen-item {
+            background-color: #444;
+            color: #fff;
+        }
+
+        .absen-item .status {
+            color: green;
+        }
+
+        body.dark-mode .absen-item .status {
+            color: #8bc34a;
+        }
+
+        .absen-item .delete-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .absen-item .delete-btn:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>Sisbam - Data Absen</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <!-- Daftar Absensi -->
+    <div class="admin-section">
+        <h3>Daftar Kehadiran Siswa</h3>
+        <div class="absen-list" id="admin-absen-list">
+            <!-- Daftar absensi siswa akan ditampilkan di sini -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('system-sisbam.html')"><i class="fas fa-stream"></i> Kategori</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk menavigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk menampilkan daftar absensi di halaman admin
+        function displayAdminAttendance() {
+            const attendance = JSON.parse(localStorage.getItem('Absensi')) || [];
+            const attendanceList = document.getElementById('admin-absen-list');
+            
+            // Jika tidak ada data absensi
+            if (attendance.length === 0) {
+                attendanceList.innerHTML = '<p>Belum ada data absensi.</p>';
+                return;
+            }
+
+            // Tampilkan daftar absensi
+            attendanceList.innerHTML = attendance.map((item, index) => {
+                return `
+                    <div class="absen-item">
+                        <div>
+                            <p><strong>${item.name}</strong></p>
+                            <p>Tanggal: ${item.date}</p>
+                            <p class="status">${item.status}</p>
+                        </div>
+                        <button class="delete-btn" onclick="deleteAttendance(${index})">Hapus</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Fungsi untuk menghapus data absensi
+        function deleteAttendance(index) {
+            const attendance = JSON.parse(localStorage.getItem('Absensi')) || [];
+            attendance.splice(index, 1); // Hapus item dari array
+            localStorage.setItem('Absensi', JSON.stringify(attendance)); // Simpan kembali ke localStorage
+            displayAdminAttendance(); // Perbarui daftar absensi
+        }
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        }
+
+        // Menampilkan daftar absensi saat halaman admin dimuat
+        window.onload = function() {
+            // Set tema berdasarkan localStorage
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-toggle").classList.remove("fa-moon");
+                document.getElementById("theme-toggle").classList.add("fa-sun");
+            }
+
+            // Menampilkan daftar absensi di halaman admin
+            displayAdminAttendance();
+        }
+    </script>
+
+</body>
+</html>

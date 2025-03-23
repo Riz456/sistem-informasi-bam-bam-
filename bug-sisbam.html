@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Tracker v2.2 - Operator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #007bff;
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header button {
+            background: #0056b3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .header button:hover {
+            background: #004080;
+        }
+
+        /* Dashboard */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h2 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .stat-card p {
+            font-size: 20px;
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        /* Filter dan Pencarian */
+        .filter-search {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-search select,
+        .filter-search input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .filter-search button {
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .filter-search button:hover {
+            background: #0056b3;
+        }
+
+        /* Daftar Bug */
+        .bug-list {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .bug-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+
+        .bug-item:hover {
+            background: #f8f9fa;
+        }
+
+        .bug-info {
+            flex: 1;
+        }
+
+        .bug-info h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .bug-info p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .bug-status {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+
+        .bug-status.open {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .bug-status.in-progress {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .bug-status.resolved {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .bug-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .bug-actions button {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .bug-actions button.edit {
+            background: #007bff;
+            color: white;
+        }
+
+        .bug-actions button.edit:hover {
+            background: #0056b3;
+        }
+
+        .bug-actions button.resolve {
+            background: #28a745;
+            color: white;
+        }
+
+        .bug-actions button.resolve:hover {
+            background: #218838;
+        }
+
+        .bug-actions button.delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .bug-actions button.delete:hover {
+            background: #c82333;
+        }
+
+        /* Form Tambah/Edit Bug */
+        .form-container {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-container h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .form-container button:hover {
+            background: #0056b3;
+        }
+
+        /* Notifikasi */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* Animasi */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsif untuk HP */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .header button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .stat-card h2 {
+                font-size: 14px;
+            }
+
+            .stat-card p {
+                font-size: 18px;
+            }
+
+            .bug-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .bug-status {
+                margin-left: 0;
+                margin-top: 5px;
+            }
+
+            .bug-actions {
+                width: 100%;
+                justify-content: flex-end;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Bug Tracker v2.2</h1>
+            <button onclick="showForm('add')">Tambah Bug</button>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="stats fade-in">
+            <div class="stat-card">
+                <h2>Total Bug</h2>
+                <p id="total-bugs">0</p>
+            </div>
+            <div class="stat-card">
+                <h2>Bug Terbuka</h2>
+                <p id="open-bugs">0</p>
+            </div>
+            <div class="stat-card">
+                <h2>Bug Selesai</h2>
+                <p id="resolved-bugs">0</p>
+            </div>
+        </div>
+
+        <!-- Filter dan Pencarian -->
+        <div class="filter-search fade-in">
+            <select id="filter-status">
+                <option value="all">Semua Status</option>
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+            </select>
+            <input type="text" id="search-input" placeholder="Cari halaman atau deskripsi...">
+            <button onclick="filterAndSearch()">Cari</button>
+        </div>
+
+        <!-- Form Tambah/Edit Bug -->
+        <div class="form-container fade-in" id="form-container" style="display: none;">
+            <h2 id="form-title">Tambah Bug Baru</h2>
+            <form id="bug-form">
+                <input type="text" id="page" placeholder="Nama Halaman" required>
+                <textarea id="description" placeholder="Deskripsi Bug" required></textarea>
+                <select id="status">
+                    <option value="open">Open</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+                <button type="submit" id="form-button">Tambah Bug</button>
+            </form>
+        </div>
+
+        <!-- Daftar Bug -->
+        <div class="bug-list fade-in" id="bug-list">
+            <!-- Daftar bug akan dimuat di sini -->
+        </div>
+    </div>
+
+    <!-- Notifikasi -->
+    <div id="notification" class="notification" style="display: none;"></div>
+
+    <script>
+        // Data bug (simpan di localStorage)
+        let bugs = JSON.parse(localStorage.getItem("bugs")) || [];
+
+        // Fungsi untuk menampilkan form
+        function showForm(action, page = "") {
+            const formContainer = document.getElementById("form-container");
+            const formTitle = document.getElementById("form-title");
+            const formButton = document.getElementById("form-button");
+
+            if (action === "add") {
+                formTitle.innerText = "Tambah Bug Baru";
+                formButton.innerText = "Tambah Bug";
+                document.getElementById("bug-form").reset();
+            } else if (action === "edit") {
+                formTitle.innerText = "Edit Bug";
+                formButton.innerText = "Simpan Perubahan";
+                const bug = bugs.find(bug => bug.page === page);
+                if (bug) {
+                    document.getElementById("page").value = bug.page;
+                    document.getElementById("description").value = bug.description;
+                    document.getElementById("status").value = bug.status;
+                }
+            }
+
+            formContainer.style.display = "block";
+        }
+
+        // Fungsi untuk menyimpan bug
+        document.getElementById("bug-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const page = document.getElementById("page").value;
+            const description = document.getElementById("description").value;
+            const status = document.getElementById("status").value;
+
+            const existingBugIndex = bugs.findIndex(bug => bug.page === page);
+            if (existingBugIndex !== -1) {
+                // Edit bug
+                bugs[existingBugIndex] = { page, description, status };
+                showNotification("Bug berhasil diperbarui!");
+            } else {
+                // Tambah bug baru
+                bugs.push({ page, description, status });
+                showNotification("Bug berhasil ditambahkan!");
+            }
+
+            localStorage.setItem("bugs", JSON.stringify(bugs));
+            renderBugList();
+            updateStats();
+            document.getElementById("form-container").style.display = "none";
+        });
+
+        // Fungsi untuk merender daftar bug
+        function renderBugList(filteredBugs = bugs) {
+            const bugList = document.getElementById("bug-list");
+            bugList.innerHTML = "";
+
+            filteredBugs.forEach(bug => {
+                const bugItem = document.createElement("div");
+                bugItem.className = "bug-item fade-in";
+                bugItem.innerHTML = `
+                    <div class="bug-info" onclick="redirectToPage('${bug.page}')">
+                        <h3>${bug.page}</h3>
+                        <p>${bug.description}</p>
+                    </div>
+                    <div class="bug-status ${bug.status.replace(" ", "-")}">${bug.status}</div>
+                    <div class="bug-actions">
+                        <button class="edit" onclick="showForm('edit', '${bug.page}')"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="resolve" onclick="resolveBug('${bug.page}')"><i class="fas fa-check"></i> Selesai</button>
+                        <button class="delete" onclick="deleteBug('${bug.page}')"><i class="fas fa-trash"></i> Hapus</button>
+                    </div>
+                `;
+                bugList.appendChild(bugItem);
+            });
+        }
+
+        // Fungsi untuk redirect ke halaman yang memiliki bug
+        function redirectToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk menghapus bug
+        function deleteBug(page) {
+            bugs = bugs.filter(bug => bug.page !== page);
+            localStorage.setItem("bugs", JSON.stringify(bugs));
+            renderBugList();
+            updateStats();
+            showNotification("Bug berhasil dihapus!");
+        }
+
+        // Fungsi untuk menandai bug sebagai selesai
+        function resolveBug(page) {
+            const bug = bugs.find(bug => bug.page === page);
+            if (bug) {
+                bug.status = "resolved";
+                localStorage.setItem("bugs", JSON.stringify(bugs));
+                renderBugList();
+                updateStats();
+                showNotification("Bug berhasil diselesaikan!");
+            }
+        }
+
+        // Fungsi untuk memperbarui statistik
+        function updateStats() {
+            const totalBugs = bugs.length;
+            const openBugs = bugs.filter(bug => bug.status === "open").length;
+            const resolvedBugs = bugs.filter(bug => bug.status === "resolved").length;
+
+            document.getElementById("total-bugs").innerText = totalBugs;
+            document.getElementById("open-bugs").innerText = openBugs;
+            document.getElementById("resolved-bugs").innerText = resolvedBugs;
+        }
+
+        // Fungsi untuk menampilkan notifikasi
+        function showNotification(message) {
+            const notification = document.getElementById("notification");
+            notification.innerText = message;
+            notification.style.display = "block";
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 3000);
+        }
+
+        // Fungsi untuk filter dan pencarian
+        function filterAndSearch() {
+            const filterStatus = document.getElementById("filter-status").value;
+            const searchQuery = document.getElementById("search-input").value.toLowerCase();
+
+            let filteredBugs = bugs;
+
+            if (filterStatus !== "all") {
+                filteredBugs = filteredBugs.filter(bug => bug.status === filterStatus);
+            }
+
+            if (searchQuery) {
+                filteredBugs = filteredBugs.filter(bug => 
+                    bug.page.toLowerCase().includes(searchQuery) || 
+                    bug.description.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            renderBugList(filteredBugs);
+        }
+
+        // Inisialisasi
+        renderBugList();
+        updateStats();
+    </script>
+</body>
+</html>

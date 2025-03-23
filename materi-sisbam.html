@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Pembelajaran - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        :root {
+            --primary-color: #007bff;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: #fff;
+            --border-color: #ddd;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Dark Theme */
+        body.dark-mode {
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --card-bg: #1e1e1e;
+            --border-color: #333;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Search and Filter Section */
+        .tools-section {
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border-radius: 25px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Materials Grid */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .material-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .material-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .material-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .material-subject {
+            font-size: 0.9em;
+            color: var(--primary-color);
+            background-color: rgba(0,123,255,0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        .material-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .material-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .material-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        /* Preview Modal */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+
+        .preview-content {
+            background-color: var(--card-bg);
+            margin: 2% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .preview-body {
+            height: 70vh;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h2>Materi Pembelajaran</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="tools-section">
+        <div class="search-box">
+            <input type="text" placeholder="Cari materi..." id="searchInput">
+            <i class="fas fa-search"></i>
+        </div>
+        <select class="filter-select" id="subjectFilter">
+            <option value="">Semua Mata Pelajaran</option>
+            <option value="Matematika">Matematika</option>
+            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+            <option value="IPA">IPA</option>
+            <option value="IPS">IPS</option>
+            <option value="Bahasa Inggris">Bahasa Inggris</option>
+        </select>
+    </div>
+
+    <!-- Materials Grid -->
+    <div class="materials-grid" id="materialsContainer">
+        <!-- Materials will be loaded here dynamically -->
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="preview-modal" id="previewModal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h3 id="previewTitle"></h3>
+                <button class="btn btn-secondary" onclick="closePreview()">Tutup</button>
+            </div>
+            <div class="preview-body">
+                <video class="video-player" id="videoPlayer" controls>
+                    <source id="videoSource" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Materials
+        function initMaterials() {
+            if (!localStorage.getItem('materials')) {
+                localStorage.setItem('materials', JSON.stringify([]));
+            }
+            renderMaterials();
+        }
+
+        // Render Materials
+        function renderMaterials(filteredMaterials) {
+            const container = document.getElementById('materialsContainer');
+            const data = filteredMaterials || JSON.parse(localStorage.getItem('materials')) || [];
+            
+            container.innerHTML = data.map(material => `
+                <div class="material-card">
+                    <div class="material-header">
+                        <span class="material-subject">${material.subject}</span>
+                        <span class="material-meta">${new Date(material.uploadDate).toLocaleDateString()}</span>
+                    </div>
+                    <h3 class="material-title">${material.title}</h3>
+                    <div class="material-meta">
+                        <span>Diunduh ${material.downloadCount}x</span>
+                    </div>
+                    <div class="material-actions">
+                        <button class="btn btn-primary" onclick="downloadMaterial(${material.id})">
+                            <i class="fas fa-download"></i> Unduh
+                        </button>
+                        <button class="btn btn-secondary" onclick="previewMaterial('${material.videoUrl}', '${material.title}')">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Materials
+        function filterMaterials() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const subject = document.getElementById('subjectFilter').value;
+            
+            const allMaterials = JSON.parse(localStorage.getItem('materials')) || [];
+            
+            const filtered = allMaterials.filter(material => {
+                const matchesSearch = material.title.toLowerCase().includes(searchTerm);
+                const matchesSubject = subject ? material.subject === subject : true;
+                return matchesSearch && matchesSubject;
+            });
+            
+            renderMaterials(filtered);
+        }
+
+        // Download Material
+        function downloadMaterial(materialId) {
+            const materials = JSON.parse(localStorage.getItem('materials'));
+            const materialIndex = materials.findIndex(m => m.id === materialId);
+            
+            if (materialIndex > -1) {
+                materials[materialIndex].downloadCount++;
+                localStorage.setItem('materials', JSON.stringify(materials));
+                renderMaterials();
+                
+                // Simulate download (replace with actual download logic)
+                const link = document.createElement('a');
+                link.href = materials[materialIndex].videoUrl;
+                link.download = true;
+                link.click();
+            }
+        }
+
+        // Preview Material
+        function previewMaterial(videoUrl, title) {
+            document.getElementById('previewModal').style.display = 'block';
+            document.getElementById('videoSource').src = videoUrl;
+            document.getElementById('videoPlayer').load();
+            document.getElementById('previewTitle').textContent = title;
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+            document.getElementById('videoSource').src = '';
+            document.getElementById('videoPlayer').load();
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        // Check Theme on Load
+        function checkTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', filterMaterials);
+        document.getElementById('subjectFilter').addEventListener('change', filterMaterials);
+
+        // Initialization
+        checkTheme();
+        initMaterials();
+    </script>
+</body>
+</html>

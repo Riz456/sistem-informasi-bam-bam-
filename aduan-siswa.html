@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisBam - Aduan Siswa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS sama seperti sebelumnya */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .header {
+            background: rgba(30, 30, 30, 0.8);
+            border-bottom: 1px solid #333;
+        }
+
+        .header h2 {
+            font-size: 20px;
+        }
+
+        .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icons i {
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .icons i:hover {
+            transform: scale(1.2);
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+            margin: 15px;
+        }
+
+        body.dark-mode .banner {
+            background: linear-gradient(to right, #1e1e1e, #333);
+        }
+
+        /* Form Aduan */
+        .form-aduan {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam - Aduan Siswa</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-envelope" onclick="openEmail()"></i>
+            <i class="fas fa-bell" onclick="openNotifications()"></i>
+        </div>
+    </div>
+
+    <!-- Banner Selamat Datang -->
+    <div class="banner" id="sambutan">
+        Laporkan Bullying dan Masalah Lainnya
+    </div>
+
+    <!-- Form Aduan Siswa -->
+    <div class="form-aduan">
+        <form id="aduanForm">
+            <div class="form-group">
+                <label for="nama">Nama Pelapor:</label>
+                <input type="text" id="nama" name="nama" placeholder="Masukkan nama Anda" required>
+            </div>
+            <div class="form-group">
+                <label for="kelas">Kelas:</label>
+                <input type="text" id="kelas" name="kelas" placeholder="Masukkan kelas Anda" required>
+            </div>
+            <div class="form-group">
+                <label for="laporan">Deskripsi Aduan:</label>
+                <textarea id="laporan" name="laporan" placeholder="Jelaskan aduan Anda" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="bukti">Unggah Bukti (Gambar):</label>
+                <input type="file" id="bukti" name="bukti" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn-submit">Kirim Aduan</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('menu-sisbam.html')"><i class="fas fa-stream"></i> Menu</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <script>
+        // Fungsi untuk mengirim aduan
+        document.getElementById("aduanForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const nama = document.getElementById("nama").value;
+            const kelas = document.getElementById("kelas").value;
+            const laporan = document.getElementById("laporan").value;
+            const bukti = document.getElementById("bukti").files[0];
+
+            // Konversi gambar ke Base64
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const buktiBase64 = event.target.result;
+
+                // Simpan data aduan ke localStorage
+                const aduan = {
+                    nama,
+                    kelas,
+                    laporan,
+                    bukti: buktiBase64, // Simpan gambar sebagai Base64
+                };
+
+                let aduanList = JSON.parse(localStorage.getItem("aduanList")) || [];
+                aduanList.push(aduan);
+                localStorage.setItem("aduanList", JSON.stringify(aduanList));
+
+                // Redirect ke halaman admin
+                window.location.href = "i-bam.html";
+            };
+            reader.readAsDataURL(bukti);
+        });
+
+        // Fungsi untuk toggle tema gelap/terang
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        }
+
+        // Fungsi untuk mengarahkan ke halaman lain
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk memeriksa tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-toggle").classList.replace("fa-moon", "fa-sun");
+            }
+        });
+    </script>
+</body>
+</html>

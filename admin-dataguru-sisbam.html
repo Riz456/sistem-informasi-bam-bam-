@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS Umum */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+         body.dark-mode .header {
+              background-color: #1e1e1e;
+              border-bottom: 1px solid #333;
+          }
+  
+          body.dark-mode .menu {
+              background: rgba(30, 30, 30, 0.9);
+          }
+  
+          body.dark-mode .menu a:hover {
+              background: #444;
+          }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 0;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+         .header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              background-color: #fff;
+              padding: 15px;
+              border-bottom: 1px solid #ddd;
+              transition: background-color 0.3s;
+          }
+          .header h2 {
+            margin: 0;
+            font-family: 'Audiowide', sans-serif;
+        }
+  
+          .header .menu-toggle {
+              font-size: 24px;
+              cursor: pointer;
+          }
+  
+          .header .icons {
+              display: flex;
+              gap: 15px;
+          }
+  
+          .header .icons i {
+              font-size: 20px;
+              cursor: pointer;
+          }
+        
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .container {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>SisBam</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-envelope" onclick="openEmail()"></i>
+            <i class="fas fa-bell" onclick="openNotifications()"></i>
+        </div>
+    </div>
+
+    <!-- Konten Admin -->
+    <div class="container">
+        <h1>Admin - Tambah Guru</h1>
+        <form id="guruForm">
+            <div class="form-group">
+                <label for="nama">Nama Guru:</label>
+                <input type="text" id="nama" required>
+            </div>
+            <div class="form-group">
+                <label for="mataPelajaran">Mata Pelajaran:</label>
+                <input type="text" id="mataPelajaran" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status Pegawai:</label>
+                <select id="status" required>
+                    <option value="PPPK">PPPK</option>
+                    <option value="PNS">PNS</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tmt">TMT:</label>
+                <input type="date" id="tmt" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="wa">No WA:</label>
+                <input type="text" id="wa" required>
+            </div>
+            <div class="form-group">
+                <label for="motto">Motto:</label>
+                <textarea id="motto" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="foto">Foto Profil:</label>
+                <input type="file" id="foto" accept="image/*" required>
+            </div>
+            <button type="submit">Tambah Guru</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </div>
+        <div onclick="goToPage('menu-sisbam.html')">
+            <i class="fas fa-stream"></i>
+            <span>Menu</span>
+        </div>
+        <div onclick="goToPage('profil-sisbam.html')">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </div>
+        <div onclick="goToPage('pengaturan.html')">
+            <i class="fas fa-cog"></i>
+            <span>Pengaturan</span>
+        </div>
+    </div>
+
+    <script>
+      // Fungsi untuk menavigasi ke halaman tertentu
+          function goToPage(page) {
+              window.location.href = page;
+          }
+        // Simpan data guru di localStorage
+        let guruData = JSON.parse(localStorage.getItem("guruData")) || [];
+
+        // Fungsi untuk menambahkan guru
+        document.getElementById("guruForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const nama = document.getElementById("nama").value;
+            const mataPelajaran = document.getElementById("mataPelajaran").value;
+            const status = document.getElementById("status").value;
+            const tmt = document.getElementById("tmt").value;
+            const email = document.getElementById("email").value;
+            const wa = document.getElementById("wa").value;
+            const motto = document.getElementById("motto").value;
+            const foto = document.getElementById("foto").files[0];
+
+            // Konversi foto ke base64
+            const reader = new FileReader();
+            reader.onload = function () {
+                const guru = {
+                    nama,
+                    mataPelajaran,
+                    status,
+                    tmt,
+                    email,
+                    wa,
+                    motto,
+                    foto: reader.result
+                };
+
+                guruData.push(guru);
+                localStorage.setItem("guruData", JSON.stringify(guruData));
+
+                alert("Guru berhasil ditambahkan!");
+                document.getElementById("guruForm").reset();
+            };
+            reader.readAsDataURL(foto);
+        });
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        }
+
+        // Cek preferensi tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            const themeToggle = document.getElementById("theme-toggle");
+
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                document.body.classList.remove("dark-mode");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        });
+    </script>
+</body>
+</html>

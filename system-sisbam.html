@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisBam - System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body.dark-mode .header {
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+             position: sticky; /* Membuat header tetap di atas */
+             top: 0; /* Menempel di bagian atas */
+              z-index: 1000; /* Memastikan header berada di atas elemen lain */
+        }
+        
+
+        .header h2 {
+            font-size: 20px;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header .icons i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Banner Ucapan Selamat Datang */
+        .banner {
+            background-color: #e3f2fd;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .banner {
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        /* Menu Lainnya */
+        .menu-lainnya {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .menu-item {
+            width: 150px;
+            padding: 15px;
+            text-align: center;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #f1f1f1;
+        }
+
+        .menu-item i {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        body.dark-mode .menu-item {
+            background: #1e1e1e;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .menu-item:hover {
+            background: #444;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam Admin Page</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-envelope" onclick="openEmail()"></i>
+            <i class="fas fa-bell" onclick="openNotifications()"></i>
+        </div>
+    </div>
+
+    <!-- Banner Ucapan Selamat Datang -->
+    <div class="banner" id="sambutan">
+        Selamat datang di menu lainnya!
+    </div>
+
+    <!-- Menu Lainnya -->
+   <div class="menu-lainnya">
+    <div class="menu-item" onclick="goToPage('guru-beranda.html')">
+        <i class="fas fa-user-graduate"></i><br>Beranda Guru
+    </div>
+    
+    <div class="menu-item" onclick="goToPage('admin-materi.html')">
+        <i class="fas fa-file-medical"></i><br>Tambah Materi
+    </div>
+    <div class="menu-item" onclick="goToPage('materi-sisbam.html')">
+        <i class="fas fa-book-reader"></i><br>Materi
+    </div>
+    <div class="menu-item" onclick="goToPage('admin-tugas-sisbam.html')">
+        <i class="fas fa-tasks"></i><br>Tugas
+    </div>
+    
+    <div class="menu-item" onclick="goToPage('admin-nilai-sisbam.html')">
+        <i class="fas fa-chart-bar"></i><br>Input Nilai
+    </div>
+    <div class="menu-item" onclick="goToPage('admin-cbt.html')">
+        <i class="fas fa-file-signature"></i><br>Nilai Ujian Siswa
+    </div>
+      <div class="menu-item" onclick="goToPage('admin-agenda-sisbam.html')">
+        <i class="fas fa-calendar"></i><br>Agenda
+    </div>
+    
+    <div class="menu-item" onclick="goToPage('admin-absen-sisbam.html')">
+        <i class="fas fa-user-clock"></i><br>Data Absen Siswa
+    </div>
+    
+    <div class="menu-item" onclick="goToPage('admin-aduan-sisbam.html')">
+        <i class="fas fa-comment-dots"></i><br>Aduan Siswa
+    </div>
+    
+    <div class="menu-item" onclick="goToPage('admin-pengumuman.html')">
+        <i class="fas fa-microphone-alt"></i><br>Pengumuman
+    </div>
+
+    <div class="menu-item" onclick="goToPage('admin-marque.html')">
+        <i class="fas fa-scroll"></i><br>Teks Marquee
+    </div>
+    
+    <div class="menu-item" onclick="goToPage('blank.html')">
+        <i class="fas fa-link"></i><br>Link Sekolah
+    </div>
+    
+    <div class="menu-item" onclick="goToPage('admin-dataguru-sisbam.html')">
+        <i class="fas fa-id-badge"></i><br>Data Guru
+    </div>
+    <div class="menu-item" onclick="goToPage('admin-sisbam.html')">
+        <i class="fas fa-users-cog"></i><br>Data User
+    </div>
+
+    <div class="menu-item" onclick="goToPage('bug-sisbam.html')">
+        <i class="fas fa-tools"></i><br>Daftar Bug
+    </div>
+</div>
+</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('sispus-home.html')"><i class="fas fa-signature"></i> Litbam </div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk navigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Menampilkan nama pengguna saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            let username = localStorage.getItem("username");
+            if (username) {
+                document.getElementById("sambutan").innerText = `Selamat datang ${username} dihalaman system sisbam v1`;
+            }
+        });
+
+        // Fungsi untuk membuka halaman email
+        function openEmail() {
+            window.location.href = "email.html";
+        }
+
+        // Fungsi untuk membuka halaman notifikasi
+        function openNotifications() {
+            window.location.href = "notifikasi.html";
+        }
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        }
+
+        // Cek preferensi tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            const themeToggle = document.getElementById("theme-toggle");
+
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                document.body.classList.remove("dark-mode");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengumuman - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        body.dark-mode .header {
+            background-color: #1f1f1f;
+        }
+
+        .header .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header .icons i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .header .icons .notification {
+            position: relative;
+        }
+
+        .header .icons .notification .dot {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .form-container {
+            padding: 20px;
+            background-color: #fff;
+            margin: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container input, .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .pengumuman-list {
+            padding: 20px;
+        }
+
+        .pengumuman-item {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .pengumuman-item {
+            background-color: #333;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .pengumuman-item h3 {
+            margin-bottom: 10px;
+        }
+
+        .pengumuman-item p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .pengumuman-item .tanggal {
+            font-size: 12px;
+            color: #888;
+        }
+
+        body.dark-mode .pengumuman-item .tanggal {
+            color: #bbb;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        body.dark-mode .footer {
+            background-color: #1f1f1f;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>Pengumuman</h2>
+        <div class="icons">
+            <div class="notification">
+                <i class="fas fa-bell"></i>
+                <!-- Tanda titik merah jika ada pengumuman baru -->
+                <div class="dot"></div>
+            </div>
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <!-- Form untuk menambahkan pengumuman -->
+    <div class="form-container">
+        <h2>Tambah Pengumuman Baru</h2>
+        <form id="add-announcement-form">
+            <input type="text" id="announcement-title" placeholder="Judul Pengumuman" required>
+            <textarea id="announcement-content" rows="4" placeholder="Isi Pengumuman" required></textarea>
+            <button type="submit">Tambah Pengumuman</button>
+        </form>
+    </div>
+
+    <!-- Daftar Pengumuman -->
+    <div class="pengumuman-list" id="announcement-list">
+        <!-- Pengumuman akan ditampilkan di sini -->
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('system-sisbam.html')"><i class="fas fa-stream"></i> Kategori</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk menavigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk menampilkan pengumuman
+        function displayAnnouncements() {
+            const announcements = JSON.parse(localStorage.getItem('Pengumuman')) || [];
+            const announcementList = document.getElementById('announcement-list');
+            
+            // Jika tidak ada pengumuman, tampilkan pesan
+            if (announcements.length === 0) {
+                announcementList.innerHTML = '<p>Belum ada pengumuman.</p>';
+                return;
+            }
+
+            // Tampilkan pengumuman
+            announcementList.innerHTML = announcements.map(announcement => {
+                return `
+                    <div class="pengumuman-item">
+                        <h3>${announcement.title}</h3>
+                        <p>${announcement.content}</p>
+                        <p class="tanggal">Tanggal: ${announcement.date}</p>
+                        <button onclick="deleteAnnouncement('${announcement.date}')">Hapus</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Fungsi untuk menambahkan pengumuman
+        document.getElementById("add-announcement-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const title = document.getElementById("announcement-title").value;
+            const content = document.getElementById("announcement-content").value;
+            const date = new Date().toLocaleDateString();
+
+            const newAnnouncement = {
+                title: title,
+                content: content,
+                date: date
+            };
+
+            // Ambil pengumuman dari localStorage dan tambahkan yang baru
+            const announcements = JSON.parse(localStorage.getItem('Pengumuman')) || [];
+            announcements.push(newAnnouncement);
+
+            // Simpan kembali ke localStorage
+            localStorage.setItem('Pengumuman', JSON.stringify(announcements));
+
+            // Reset form dan tampilkan pengumuman baru
+            document.getElementById("announcement-title").value = '';
+            document.getElementById("announcement-content").value = '';
+            displayAnnouncements();
+        });
+
+        // Fungsi untuk menghapus pengumuman
+        function deleteAnnouncement(date) {
+            const announcements = JSON.parse(localStorage.getItem('Pengumuman')) || [];
+            const filteredAnnouncements = announcements.filter(announcement => announcement.date !== date);
+
+            // Simpan pengumuman yang sudah dihapus
+            localStorage.setItem('Pengumuman', JSON.stringify(filteredAnnouncements));
+
+            // Tampilkan ulang daftar pengumuman
+            displayAnnouncements();
+        }
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        }
+
+        // Mengatur tema saat halaman dimuat
+        window.onload = function() {
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-toggle").classList.remove("fa-moon");
+                document.getElementById("theme-toggle").classList.add("fa-sun");
+            }
+            displayAnnouncements();
+        }
+    </script>
+
+</body>
+</html>

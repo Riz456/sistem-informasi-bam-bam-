@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisBam - Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS yang sama seperti sebelumnya */
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Badge Notifikasi */
+        .notif-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: none; /* Tersembunyi jika tidak ada notifikasi */
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body.dark-mode .header {
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+              position: sticky; /* Membuat header tetap di atas */
+             top: 0; /* Menempel di bagian atas */
+              z-index: 1000; /* Memastikan header berada di atas elemen lain */
+        }
+
+        .header h2 {
+            margin: 0;
+            font-family: 'Audiowide', sans-serif;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header .icons i {
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .header .icons i:hover {
+            color: #498;
+        }
+
+        /* Input Pencarian Modern */
+        .header .search-container {
+            flex: 1;
+            margin: 0 20px;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .header .search-container input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #f8f9fa;
+            outline: none;
+        }
+
+        .header .search-container input:focus {
+            border-color: #498;
+            box-shadow: 0 0 0 3px rgba(73, 136, 136, 0.1);
+        }
+
+        .header .search-container i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        /* Banner Ucapan Selamat Datang */
+        .banner {
+            background-color: #e3f2fd;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .banner {
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        /* Menu Lainnya */
+        .menu-lainnya {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu-item {
+            width: 150px;
+            padding: 20px;
+            text-align: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item i {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #498;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover i {
+            transform: scale(1.1);
+        }
+
+        .menu-item span {
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        /* Dark mode */
+        body.dark-mode .menu-item {
+            background: #1e1e1e;
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .menu-item:hover {
+            background: #444;
+        }
+
+        body.dark-mode .menu-item span {
+            color: #fff;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .footer div:hover {
+            color: #498;
+        }
+
+        .footer i {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam</h2>
+         <div class="search-container">
+            <input type="text" id="search-input" placeholder="Cari menu...">
+            <i class="fas fa-search"></i>
+        </div>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-bell" id="notif-icon" onclick="openNotifications()">
+                <span id="notif-badge" class="notif-badge"></span>
+            </i>
+        </div>
+    </div>
+
+    <!-- Banner Ucapan Selamat Datang -->
+    <div class="banner" id="sambutan">
+        Selamat datang di menu lainnya!
+    </div>
+
+    <!-- Menu Lainnya -->
+    <div class="menu-lainnya" id="menu-lainnya">
+        <!-- Menu akan diisi secara dinamis oleh JavaScript -->
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('menu-sisbam.html')"><i class="fas fa-stream"></i> Menu</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Data menu
+        const menuItems = [
+            { id: 'sisbam-ai', icon: 'fas fa-atom', text: 'Sisbam AI', page: 'sisbam-ai.html' },
+             { id: 'Agenda', icon: 'fas fa-user-clock', text: 'AGENDA', page: 'agenda-sisbam.html' },
+            { id: 'cbt-sisbam', icon: 'fas fa-laptop-code', text: 'CBT', page: 'cbt-sisbam.html' },
+            { id: 'nilai-siswa', icon: 'fas fa-chart-bar', text: 'Nilai Siswa', page: 'blank.html' },
+            { id: 'jadwal-sisbam', icon: 'fas fa-calendar-alt', text: 'Jadwal', page: 'jadwal-sisbam.html' },
+            { id: 'materi-sisbam', icon: 'fas fa-book-open', text: 'Materi', page: 'materi-sisbam.html' },
+            { id: 'tugas', icon: 'fas fa-tasks', text: 'Tugas', page: 'tugas.html' },
+            { id: 'absen-siswa', icon: 'fas fa-user-check', text: 'Absen Siswa', page: 'Absen-sisbam.html' },
+            { id: 'pengumuman-sisbam', icon: 'fas fa-bullhorn', text: 'Pengumuman', page: 'pengumuman-sisbam.html' },
+            { id: 'aduan-siswa', icon: 'fas fa-file-signature', text: 'Laporkan', page: 'aduan-siswa.html' },
+            { id: 'data-siswa', icon: 'fas fa-id-badge', text: 'Data Siswa', page: 'blank.html' },
+            { id: 'data-guru', icon: 'fas fa-chalkboard-teacher', text: 'Data Guru', page: 'data-guru.html' },
+            { id: 'maps-sisbam', icon: 'fas fa-map-marked-alt', text: 'Maps Sekolah', page: 'maps-sisbam.html' },
+            { id: 'fasilitas-sisbam', icon: 'fas fa-university', text: 'Fasilitas Sekolah', page: 'fasilitas-sisbam.html' },
+            { id: 'event', icon: 'fas fa-calendar-check', text: 'Event', page: 'event-sisbam.html' },
+            { id: 'sisbam-projek', icon: 'fas fa-tools', text: 'Projek Website', page: 'sisbam-projek.html' },
+            { id: 'game-sisbam', icon: 'fas fa-gamepad', text: 'Game', page: 'game-sisbam.html' }
+        ];
+
+        // Fungsi untuk menyimpan riwayat kunjungan
+        function saveVisit(menuId) {
+            let visits = JSON.parse(localStorage.getItem('menuVisits')) || {};
+            visits[menuId] = (visits[menuId] || 0) + 1;
+            localStorage.setItem('menuVisits', JSON.stringify(visits));
+        }
+
+        // Fungsi untuk mengurutkan menu berdasarkan frekuensi kunjungan
+        function sortMenuByVisits() {
+            let visits = JSON.parse(localStorage.getItem('menuVisits')) || {};
+            return menuItems.sort((a, b) => (visits[b.id] || 0) - (visits[a.id] || 0));
+        }
+
+        // Fungsi untuk menampilkan menu
+        function renderMenu() {
+            const sortedMenu = sortMenuByVisits();
+            const menuContainer = document.getElementById('menu-lainnya');
+            menuContainer.innerHTML = sortedMenu.map(item => `
+                <div class="menu-item" onclick="goToPage('${item.page}'); saveVisit('${item.id}')">
+                    <i class="${item.icon}"></i><br>${item.text}
+                </div>
+            `).join('');
+        }
+
+        // Fungsi untuk navigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Menampilkan nama pengguna saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            let username = localStorage.getItem("username");
+            if (username) {
+                document.getElementById("sambutan").innerText = `Selamat datang di halaman menu, ${username}`;
+            }
+            renderMenu();
+        });
+
+        // Fungsi untuk membuka halaman notifikasi
+        document.addEventListener("DOMContentLoaded", function () {
+            checkNotification();
+        });
+
+        function checkNotification() {
+            let newAnnouncement = localStorage.getItem("newAnnouncement");
+
+            if (newAnnouncement === "true") {
+                document.getElementById("notif-badge").style.display = "block";
+            } else {
+                document.getElementById("notif-badge").style.display = "none";
+            }
+        }
+
+        function openNotifications() {
+            window.location.href = "pengumuman-sisbam.html";
+
+            // Hapus tanda merah setelah dibuka
+            localStorage.setItem("newAnnouncement", "false");
+            checkNotification();
+        }
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        }
+
+        // Cek preferensi tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            const themeToggle = document.getElementById("theme-toggle");
+
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                document.body.classList.remove("dark-mode");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        });
+
+        // Fungsi untuk pencarian menu
+        document.getElementById("search-input").addEventListener("input", function () {
+            const searchTerm = this.value.toLowerCase();
+            const menuItems = document.querySelectorAll(".menu-item");
+
+            menuItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = "flex";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

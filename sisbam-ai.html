@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisBam - AI Lokal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .header {
+            background: rgba(30, 30, 30, 0.8);
+            border-bottom: 1px solid #333;
+        }
+
+        .header h2 {
+            font-size: 20px;
+        }
+
+        .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icons i {
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .icons i:hover {
+            transform: scale(1.2);
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+            margin: 15px;
+        }
+
+        body.dark-mode .banner {
+            background: linear-gradient(to right, #1e1e1e, #333);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .chat-container {
+            background: #1e1e1e;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+        }
+
+        body.dark-mode .chat-box {
+            border-color: #333;
+            background: #2c2c2c;
+        }
+
+        .message {
+            margin-bottom: 15px;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.ai {
+            text-align: left;
+        }
+
+        .message p {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+
+        .message.user p {
+            background: #007bff;
+            color: white;
+        }
+
+        .message.ai p {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        body.dark-mode .message.ai p {
+            background: #333;
+            color: #ffffff;
+        }
+
+        /* Input Box */
+        .input-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        body.dark-mode .input-box input {
+            border-color: #333;
+            background: #2c2c2c;
+            color: #ffffff;
+        }
+
+        .input-box button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .input-box button:hover {
+            background: #0056b3;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam - AI Lokal</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-envelope" onclick="openEmail()"></i>
+            <i class="fas fa-bell" onclick="openNotifications()"></i>
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="banner">
+        SisBam AI - Temukan Jawaban untuk Pertanyaan Anda
+    </div>
+
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <div class="chat-box" id="chatBox">
+            <!-- Pesan akan ditampilkan di sini -->
+            <div class="message ai">
+                <p>Halo! Saya SisBam AI. Silakan ajukan pertanyaan Anda.</p>
+            </div>
+        </div>
+        <div class="input-box">
+            <input type="text" id="userInput" placeholder="Ketik pertanyaan Anda di sini..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Kirim</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('kategori.html')"><i class="fas fa-stream"></i> Kategori</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script type="module">
+        import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers/dist/transformers.min.js";
+
+        // Inisialisasi model AI lokal
+        let generator;
+        async function initializeModel() {
+            try {
+                console.log("Memuat model AI...");
+                generator = await pipeline("text-generation", "Xenova/gpt-neo-125M");
+                console.log("Model AI siap digunakan.");
+            } catch (error) {
+                console.error("Gagal memuat model AI:", error);
+                addMessage("ai", "Maaf, model AI gagal dimuat. Silakan coba lagi.");
+            }
+        }
+
+        // Fungsi untuk menambahkan pesan ke chat box
+        function addMessage(sender, message) {
+            const chatBox = document.getElementById("chatBox");
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", sender);
+            messageElement.innerHTML = `<p>${message}</p>`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll ke bawah
+        }
+
+        // Fungsi untuk mengirim pesan
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput");
+            const question = userInput.value.trim();
+
+            if (question === "") return;
+
+            // Tambahkan pesan pengguna ke chat box
+            addMessage("user", question);
+
+            // Kosongkan input
+            userInput.value = "";
+
+            // Generate jawaban menggunakan model lokal
+            try {
+                if (!generator) {
+                    console.error("Model AI belum dimuat.");
+                    addMessage("ai", "Maaf, model AI belum siap. Silakan coba lagi.");
+                    return;
+                }
+
+                console.log("Mengirim pertanyaan ke model AI...");
+                const output = await generator(question, {
+                    max_length: 50, // Batasan panjang jawaban
+                });
+
+                const answer = output[0].generated_text;
+                addMessage("ai", answer);
+            } catch (error) {
+                console.error("Error:", error);
+                addMessage("ai", "Maaf, terjadi kesalahan saat memproses pertanyaan Anda.");
+            }
+        }
+
+        // Fungsi untuk menangani tombol Enter
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        // Fungsi untuk toggle tema gelap/terang
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        }
+
+        // Fungsi untuk mengarahkan ke halaman lain
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk memeriksa tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-toggle").classList.replace("fa-moon", "fa-sun");
+            }
+        });
+
+        // Inisialisasi model saat halaman dimuat
+        initializeModel();
+
+        // Tambahkan event listener untuk tombol "Kirim"
+        document.querySelector(".input-box button").addEventListener("click", sendMessage);
+
+        // Tambahkan event listener untuk input box (tombol Enter)
+        document.getElementById("userInput").addEventListener("keypress", handleKeyPress);
+    </script>
+</body>
+</html>

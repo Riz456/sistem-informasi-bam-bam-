@@ -1,0 +1,140 @@
+<!DOCTYPE html><html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Operator</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+        .sidebar ul li:hover {
+            background: #34495e;
+        }
+        .menu-toggle {
+            display: none;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+        .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 20px;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        header {
+            background: #3498db;
+            padding: 15px;
+            color: white;
+            text-align: center;
+        }
+        .content {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-250px);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const menuToggle = document.createElement("div");
+            menuToggle.classList.add("menu-toggle");
+            menuToggle.innerHTML = "<i class='fas fa-bars'></i>";
+            document.body.appendChild(menuToggle);const sidebar = document.querySelector(".sidebar");
+        menuToggle.addEventListener("click", function() {
+            sidebar.classList.toggle("show");
+        });
+    });
+</script>
+
+</head>
+<body>
+    <nav class="sidebar">
+        <h2>Operator Panel</h2>
+        <ul>
+            <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-user-graduate"></i> Kelola Data Siswa</a></li>
+            <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Kelola Data Guru</a></li>
+            <li><a href="#"><i class="fas fa-file-invoice-dollar"></i> Laporan Keuangan</a></li>
+            <li><a href="#"><i class="fas fa-calendar-alt"></i> Kelola Jadwal</a></li>
+            <li><a href="#"><i class="fas fa-book"></i> Kelola Nilai</a></li>
+            <li><a href="#"><i class="fas fa-cogs"></i> Pengaturan Akun</a></li>
+            <li><a href="login-sisbam.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+    <div class="main-content">
+        <header>
+            <h1>Selamat Datang, Operator</h1>
+        </header>
+        <div class="content">
+            <h2>Dashboard Operator</h2>
+            <p>Informasi dan statistik mengenai data yang dikelola oleh operator.</p>
+        </div>
+        <div class="content">
+            <h2>Aktivitas Terbaru</h2>
+            <p>Menampilkan log aktivitas operator terbaru.</p>
+        </div>
+        <div class="content">
+            <h2>Notifikasi</h2>
+            <p>Berisi notifikasi terkait tugas dan tanggung jawab operator.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisBam - Fasilitas Sekolah</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Tema Gelap */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s;
+             position: sticky; /* Membuat header tetap di atas */
+            top: 0; /* Menempel di bagian atas */
+            z-index: 1000; /* Memastikan header berada di atas elemen lain */
+        }
+
+        body.dark-mode .header {
+            background: rgba(30, 30, 30, 0.8);
+            border-bottom: 1px solid #333;
+        }
+
+        .header h2 {
+            font-size: 20px;
+        }
+
+        .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icons i {
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .icons i:hover {
+            transform: scale(1.2);
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+            margin: 15px;
+        }
+
+        body.dark-mode .banner {
+            background: linear-gradient(to right, #1e1e1e, #333);
+        }
+
+        /* Fasilitas Sekolah */
+        .facilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .facility-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, background 0.3s;
+            cursor: pointer;
+        }
+
+        .facility-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .facility-item img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .facility-item h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .facility-item p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        body.dark-mode .facility-item {
+            background: #1e1e1e;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .facility-item p {
+            color: #ccc;
+        }
+
+        /* Fasilitas Unggulan */
+        .facility-item.unggulan {
+            border: 2px solid #007bff;
+            background: #e6f7ff;
+        }
+
+        body.dark-mode .facility-item.unggulan {
+            border-color: #00f2fe;
+            background: #1e1e1e;
+        }
+
+        .facility-item.unggulan h3 {
+            color: #007bff;
+        }
+
+        body.dark-mode .facility-item.unggulan h3 {
+            color: #00f2fe;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+
+        body.dark-mode .footer {
+            background: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>SisBam - Fasilitas Sekolah</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+            <i class="fas fa-envelope" onclick="openEmail()"></i>
+            <i class="fas fa-bell" onclick="openNotifications()"></i>
+        </div>
+    </div>
+
+    <!-- Banner Selamat Datang -->
+    <div class="banner" id="sambutan">
+        Fasilitas Sekolah yang Tersedia
+    </div>
+
+    <!-- Daftar Fasilitas -->
+    <div class="facilities">
+        <!-- Fasilitas Unggulan -->
+        <div class="facility-item unggulan" onclick="openFacility('lab-komputer.html')">
+            <img src="lab-komputer.jpg" alt="Laboratorium Komputer">
+            <h3>Laboratorium Komputer</h3>
+            <p>Laboratorium komputer dengan perangkat terbaru untuk praktik siswa.</p>
+        </div>
+
+        <!-- Fasilitas Lainnya -->
+        <div class="facility-item" onclick="openFacility('perpustakaan.html')">
+            <img src="https://via.placeholder.com/300" alt="Perpustakaan">
+            <h3>Perpustakaan</h3>
+            <p>Perpustakaan dengan koleksi buku lengkap untuk mendukung pembelajaran siswa.</p>
+        </div>
+
+        <div class="facility-item" onclick="openFacility('lapangan-olahraga.html')">
+            <img src="https://via.placeholder.com/300" alt="Lapangan Olahraga">
+            <h3>Lapangan Olahraga</h3>
+            <p>Lapangan olahraga yang luas untuk kegiatan fisik dan ekstrakurikuler.</p>
+        </div>
+
+        <div class="facility-item" onclick="openFacility('aula-serbaguna.html')">
+            <img src="https://via.placeholder.com/300" alt="Aula Serbaguna">
+            <h3>Aula Serbaguna</h3>
+            <p>Aula serbaguna untuk acara sekolah, seminar, dan pertemuan.</p>
+        </div>
+
+        <div class="facility-item" onclick="openFacility('kantin.html')">
+            <img src="https://via.placeholder.com/300" alt="Kantin">
+            <h3>Kantin</h3>
+            <p>Kantin dengan makanan sehat dan bergizi untuk siswa dan staf.</p>
+        </div>
+
+        <div class="facility-item" onclick="openFacility('ruang-kelas.html')">
+            <img src="https://via.placeholder.com/300" alt="Ruang Kelas">
+            <h3>Ruang Kelas</h3>
+            <p>Ruang kelas nyaman dengan fasilitas modern untuk pembelajaran.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div onclick="goToPage('i-bam.html')"><i class="fas fa-home"></i> Beranda</div>
+        <div onclick="goToPage('menu-sisbam.html')"><i class="fas fa-stream"></i> Menu</div>
+        <div onclick="goToPage('profil-sisbam.html')"><i class="fas fa-user"></i> Profil</div>
+        <div onclick="goToPage('pengaturan.html')"><i class="fas fa-cog"></i> Pengaturan</div>
+    </div>
+
+    <script>
+        // Fungsi untuk membuka halaman detail fasilitas
+        function openFacility(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk toggle tema gelap/terang
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        }
+
+        // Fungsi untuk mengarahkan ke halaman lain
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk memeriksa tema saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-toggle").classList.replace("fa-moon", "fa-sun");
+            }
+        });
+    </script>
+</body>
+</html>

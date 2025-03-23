@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, viewport-fit=cover">
+    <title>CBT</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Gaya Global */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f7fb;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: #2c3e50;
+            color: white; /* Mengubah teks menjadi putih di tema gelap */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            color: #333;
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        body.dark-mode .container {
+            background: #34495e;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 100px;
+        }
+
+        .timer {
+            text-align: center;
+            margin: 20px auto;
+            background: #ff5e62;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: none; /* Sembunyikan timer pada awalnya */
+        }
+
+        body.dark-mode .timer {
+            background: #e74c3c; /* Timer dengan latar belakang lebih gelap */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #ff5e62;
+        }
+
+        body.dark-mode h1 {
+            color: white; /* Mengubah warna judul menjadi putih di tema gelap */
+        }
+
+        select, button, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        body.dark-mode select, 
+        body.dark-mode input {
+            background: #34495e;
+            border-color: #7f8c8d;
+            color: white; /* Teks input menjadi putih di tema gelap */
+        }
+
+        body.dark-mode .question input {
+            color: white; /* Input menjadi putih di tema gelap */
+            background: #34495e; /* Menjaga latar belakang input agar konsisten di tema gelap */
+        }
+
+        body.dark-mode .question label {
+            color: white; /* Label juga menjadi putih di tema gelap */
+        }
+
+        button {
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #ff5e62, #ff9966);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode button {
+            background: #000;
+            box-shadow: 0 0 10px 2px white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        /* Tombol aksi sejajar */
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .dark-mode-toggle {
+            background: #ff5e62;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background: #000;
+            box-shadow: 0 0 10px 2px white;
+        }
+
+        .dark-mode-toggle i {
+            color: white; /* Ikon menjadi putih di tema gelap */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="Logo" class="logo">
+        <h1>Ujian Siswa</h1>
+        
+        <!-- Form untuk Nama Pengguna -->
+        <div id="name-section">
+            <input type="text" id="user-name" placeholder="Masukkan nama Anda" />
+            <button id="start-exam">Mulai Ujian</button>
+        </div>
+
+        <!-- Timer dan Mata Pelajaran -->
+        <div id="timer" class="timer">Waktu: 00:00</div>
+        <select id="subject-select" class="hidden">
+            <option value="">Pilih Mata Pelajaran</option>
+        </select>
+        
+        <!-- Soal Ujian -->
+        <div id="exam-section" class="hidden">
+            <div id="questions-container"></div>
+            <div class="action-buttons">
+                <button id="submit-exam">Kirim Jawaban</button>
+                <button class="dark-mode-toggle" id="dark-mode-toggle">
+                    <i class="fas fa-adjust"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = JSON.parse(localStorage.getItem("questions") || "[]");
+        const scores = JSON.parse(localStorage.getItem("scores") || "[]");
+        let timerInterval;
+
+        function loadSubjects() {
+            const subjectSet = new Set(questions.map(q => q.subject));
+            const subjectSelect = document.getElementById("subject-select");
+            subjectSelect.innerHTML = `<option value="">Pilih Mata Pelajaran</option>`;
+            subjectSet.forEach(subject => {
+                const option = document.createElement("option");
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+        }
+
+        function displayQuestions(subject) {
+            const examSection = document.getElementById("exam-section");
+            const questionsContainer = document.getElementById("questions-container");
+            const filteredQuestions = questions.filter(q => q.subject === subject);
+
+            questionsContainer.innerHTML = "";
+            if (!filteredQuestions.length) {
+                questionsContainer.innerHTML = "<p>Tidak ada soal untuk mata pelajaran ini.</p>";
+                return;
+            }
+
+            filteredQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.className = "question";
+                questionDiv.innerHTML = `
+                    <label>${index + 1}. ${q.question}</label>
+                    <input type="text" data-index="${index}">
+                `;
+                questionsContainer.appendChild(questionDiv);
+            });
+
+            examSection.classList.remove("hidden");
+            document.getElementById("timer").style.display = "block"; // Menampilkan timer setelah soal dimulai
+            startTimer(300);
+        }
+
+        function startTimer(duration) {
+            const timerElement = document.getElementById("timer");
+            let timeRemaining = duration;
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+                const seconds = (timeRemaining % 60).toString().padStart(2, '0');
+                timerElement.textContent = `Waktu: ${minutes}:${seconds}`;
+                if (timeRemaining-- <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Waktu habis!");
+                    document.getElementById("submit-exam").click();
+                }
+            }, 1000);
+        }
+
+        // Mulai Ujian setelah nama diisi
+        document.getElementById("start-exam").addEventListener("click", () => {
+            const userName = document.getElementById("user-name").value;
+            if (userName.trim()) {
+                localStorage.setItem("studentName", userName);
+                document.getElementById("name-section").classList.add("hidden");
+                document.getElementById("subject-select").classList.remove("hidden");
+                loadSubjects();
+            } else {
+                alert("Silakan masukkan nama Anda!");
+            }
+        });
+
+        document.getElementById("submit-exam").addEventListener("click", () => {
+            clearInterval(timerInterval);
+            const selectedSubject = document.getElementById("subject-select").value;
+            const answers = document.querySelectorAll("#questions-container input");
+            let correctCount = 0;
+            let unanswered = false; // Menandai soal yang belum dijawab
+
+            answers.forEach(input => {
+                const index = parseInt(input.dataset.index, 10);
+                const userAnswer = input.value.trim();
+                
+                // Cek jika ada soal yang belum dijawab
+                if (userAnswer === "") {
+                    unanswered = true;
+                }
+
+                // Hitung jumlah jawaban yang benar
+                if (userAnswer.toLowerCase() === questions[index].answer.toLowerCase()) {
+                    correctCount++;
+                }
+            });
+
+            // Jika ada soal yang belum dijawab
+            if (unanswered) {
+                alert("Ada soal yang belum dikerjakan. Silakan jawab semua soal.");
+                return;
+            }
+
+            // Hitung skor
+            const score = Math.round((correctCount / answers.length) * 100);
+            const studentName = localStorage.getItem("studentName");
+            
+            if (studentName) {
+                scores.push({ name: studentName, subject: selectedSubject, score });
+                localStorage.setItem("scores", JSON.stringify(scores));
+                alert(`Nilai Anda untuk ${selectedSubject}: ${score}`);
+                location.reload();
+            }
+        });
+
+        document.getElementById("subject-select").addEventListener("change", (event) => {
+            const selectedSubject = event.target.value;
+            if (selectedSubject) {
+                displayQuestions(selectedSubject);
+            } else {
+                document.getElementById("exam-section").classList.add("hidden");
+                document.getElementById("timer").style.display = "none"; // Menyembunyikan timer jika mata pelajaran tidak dipilih
+            }
+        });
+
+        document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        loadSubjects();
+    </script>
+</body>
+</html>

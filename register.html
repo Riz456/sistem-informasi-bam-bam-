@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #34ebba, #3498db, #9b59b6);
+            background-size: 300% 300%;
+            animation: gradientBG 6s infinite alternate;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: left top; }
+            100% { background-position: right bottom; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+            outline: none;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 70%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #333;
+        }
+
+        .btn-submit {
+            background: #ff7eb3;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #ff5277;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Register</h1>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="full-name"><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" id="full-name" placeholder="Masukkan nama lengkap" required>
+            </div>
+            <div class="form-group">
+                <label for="new-username"><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="new-username" placeholder="Masukkan username" required>
+            </div>
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="email" placeholder="Masukkan email" required>
+            </div>
+            <div class="form-group">
+                <label for="telephone"><i class="fas fa-phone"></i> Telepon</label>
+                <input type="text" id="telephone" placeholder="Masukkan nomor telepon" required>
+            </div>
+            <div class="form-group">
+                <label for="address"><i class="fas fa-map-marker-alt"></i> Alamat</label>
+                <input type="text" id="address" placeholder="Masukkan alamat" required>
+            </div>
+            <div class="form-group">
+                <label for="new-password"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="new-password" placeholder="Masukkan password" required>
+                <i class="fas fa-eye toggle-password" onclick="togglePassword('new-password')"></i>
+            </div>
+            <button type="button" class="btn-submit" onclick="register()">Daftar</button>
+        </form>
+    </div>
+
+    <script>
+        function register() {
+            const fullName = document.getElementById('full-name').value.trim();
+            const username = document.getElementById('new-username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telephone = document.getElementById('telephone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const password = document.getElementById('new-password').value.trim();
+
+            if (!fullName || !username || !email || !telephone || !address || !password) {
+                alert("Semua kolom harus diisi!");
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            users.push({ fullName, username, email, telephone, address, password, role: "student" });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            alert("Registrasi berhasil!");
+            window.location.href = 'admin-sisbam.html';
+        }
+
+        function togglePassword(id) {
+            const passwordInput = document.getElementById(id);
+            const icon = passwordInput.nextElementSibling;
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+    </script>
+</body>
+</html>

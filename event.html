@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Bam-bam Studio™</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light {
+            background-color: white;
+            color: black;
+        }
+
+        body.dark {
+            background-color: #333;
+            color: white;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #49243E;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+        .header .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .header img {
+            width: 60px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .menu {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: -250px;
+    background-color: rgba(73, 36, 62, 0.8); /* Warna dengan transparansi */
+    padding-top: 60px;
+    transition: right 0.3s ease;
+    z-index: 2;
+}
+
+        .menu.active {
+            right: 0;
+        }
+
+        .menu a, .menu .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .menu a:hover, .menu .theme-toggle:hover {
+            background-color: #4547;
+        }
+
+        .menu i {
+            font-size: 18px;
+        }
+
+        .hamburger {
+            position: relative;
+            cursor: pointer;
+            z-index: 3;
+            width: 30px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+        }
+
+        .hamburger div {
+            width: 100%;
+            height: 2px;
+            background-color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .hamburger.active div:nth-child(1) {
+            transform: translateY(5px) rotate(45deg);
+        }
+
+        .hamburger.active div:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active div:nth-child(3) {
+            transform: translateY(-5px) rotate(-45deg);
+        }
+
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            background-color: #f0f9;
+            white-space: nowrap;
+            box-sizing: border-box;
+            padding: 10px 20px;
+        }
+
+        .marquee {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+            color: white;
+        }
+        
+        
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .event-container {
+            padding: 20px;
+            margin: 20px;
+        }
+
+        .event {
+            background-color: #f7f7f7;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .event h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #49243E;
+        }
+
+        .event p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        body.dark .event {
+            background-color: #444;
+        }
+
+        body.dark .event h2 {
+            color: white;
+        }
+
+        body.dark .event p {
+            color: #ddd;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #49243E;
+            color: #f8f8f8;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="light">
+    <div class="header">
+        <div class="logo-container">
+            <img src="bm.png" alt="Logo">
+            <h1>Bam-bam Event™</h1>
+        </div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div class="menu" id="menu">
+        <a href="indeks.html"><i class="fas fa-home"></i> Beranda</a>
+        <a href="blank.html"><i class="fas fa-calendar"></i> Event</a>
+        <a href="shop.html"><i class="fas fa-shopping-cart"></i> Shop</a>
+        <a href="redeem.html"><i class="fas fa-gift"></i> Redeem Code</a>
+        <a href="bought_items.html"><i class="fas fa-box-open"></i> Item kamu </a>
+        <div class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i> Tema</div>
+    </div>
+
+    <div class="marquee-container">
+        <div class="marquee" id="marqueeText">
+            Jangan lewatkan perayaan tahun baru bersama Bam-bam Studio™!
+        </div>
+    </div>
+
+    <div class="event-container">
+        <div class="event">
+            <h2>Event 1: Happy New Year Celebration</h2>
+            <p>Tanggal: 31 Desember 2024 - 1 Januari 2025</p>
+            <p>Grand Prize: Liburan ke Bali untuk 2 orang</p>
+            <p>Detail: "Mari kita sambut tahun baru bersama dengan pesta meriah, kembang api, dan berbagai hadiah menarik! Nikmati momen spesial bersama orang-orang tercinta."</p>
+            <a href="happy-new-year.html">
+                <img src="new-year.png" alt="Poster event Happy New Year" style="width:100%; margin-top:10px; border-radius: 8px;">
+            </a>
+        </div>
+        <div class="event">
+            <h2>Event 2: Kompetisi Resolusi Tahun Baru</h2>
+            <p>Tanggal: 1 Januari 2025</p>
+            <p>Lokasi: Aula Studio™</p>
+            <p>Detail: Bagikan resolusi tahun baru Anda yang paling inspiratif dan dapatkan hadiah menarik!</p>
+            <a href="resolution-contest.html">
+                <img src="resolution-contest.png" alt="Poster event Resolusi Tahun Baru" style="width:100%; margin-top:10px; border-radius: 8px;">
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        Bam-bam studio™. All rights reserved.
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('menu');
+            var hamburger = document.querySelector('.hamburger');
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+ // Ambil status tema dari localStorage
+const currentTheme = localStorage.getItem('theme');
+
+// Atur tema saat halaman dimuat
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark');
+    document.body.classList.remove('light');
+} else {
+    document.body.classList.add('light');
+    document.body.classList.remove('dark');
+}
+        function toggleTheme() {
+            document.body.classList.toggle("dark");
+            document.body.classList.toggle("light");
+        }
+    </script>
+</body>
+</html>

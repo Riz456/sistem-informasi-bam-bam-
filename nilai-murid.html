@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nilai Siswa - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .btn-logout {
+            margin-top: 15px;
+            padding: 10px;
+            border: none;
+            background: red;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-logout:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Nilai Siswa</h2>
+        <p id="siswa-nama"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Mata Pelajaran</th>
+                    <th>Nilai</th>
+                </tr>
+            </thead>
+            <tbody id="nilai-body"></tbody>
+        </table>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const username = localStorage.getItem("username");
+
+            if (!username) {
+                alert("Silakan login terlebih dahulu!");
+                window.location.href = "index.html";
+                return;
+            }
+
+            document.getElementById("siswa-nama").textContent = "Nama: " + username;
+
+            const nilaiSiswa = JSON.parse(localStorage.getItem("nilaiSiswa")) || {};
+            const nilai = nilaiSiswa[username] || [];
+
+            const nilaiBody = document.getElementById("nilai-body");
+            nilaiBody.innerHTML = nilai.length > 0 
+                ? nilai.map(n => `<tr><td>${n.mapel}</td><td>${n.nilai}</td></tr>`).join("") 
+                : `<tr><td colspan="2">Belum ada nilai</td></tr>`;
+        });
+
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

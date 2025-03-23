@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Litbam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link rel="website icon" type="png" href="litbam.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            background-size: 300% 300%;
+            animation: gradientBG 6s infinite alternate, floatingBackground 10s infinite linear;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: left top; }
+            100% { background-position: right bottom; }
+        }
+
+        @keyframes floatingBackground {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container img {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+
+        
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+            outline: none;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 70%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #333;
+        }
+
+        .btn-submit {
+            background: #ff7eb3;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #ff5277;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .register-link {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #ffccff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .floating-circles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .circle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 8s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0.5); }
+            100% { transform: translateY(-10vh) scale(1.5); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-circles">
+        <div class="circle" style="left: 10%; animation-duration: 8s; animation-delay: 0s;"></div>
+        <div class="circle" style="left: 40%; animation-duration: 10s; animation-delay: 2s;"></div>
+        <div class="circle" style="left: 70%; animation-duration: 6s; animation-delay: 4s;"></div>
+        <div class="circle" style="left: 90%; animation-duration: 12s; animation-delay: 1s;"></div>
+    </div>
+    <div class="container">
+        <img src="litbam.png" alt="Litbam Logo">
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="username" placeholder="Masukkan username" required>
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" placeholder="Masukkan password" required>
+                <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+            </div>
+            <button type="button" class="btn-submit" onclick="login()">Masuk</button>
+        </form>
+        <div class="register-link">
+            Belum punya akun? <a href="register.html">Daftar di sini</a>
+        </div>
+        <div class="footer">
+            &copy; 2025 Litbam. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+         function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                alert("Username dan password harus diisi!");
+                return;
+            }
+
+            localStorage.setItem("username", username);
+
+            if (username === 'admin' && password === 'admin123') {
+                alert("Login berhasil sebagai Admin!");
+                window.location.href = 'system-sisbam.html';
+                return;
+            }
+
+            if (username === 'operator' && password === 'operator123') {
+                alert("Login berhasil sebagai Operator!");
+                window.location.href = 'operator-sisbam.html';
+                return;
+            }
+            if (username === 'ika' && password === 'uka') {
+                alert("Login berhasil sebagai pemilik hati admin !");
+                window.location.href = 'profil-sisbam.html';
+                return;
+            }
+
+            const guruData = JSON.parse(localStorage.getItem('guru')) || [];
+            const guru = guruData.find(g => g.username === username && g.password === password);
+
+            if (guru) {
+                alert("Login berhasil sebagai Guru!");
+                window.location.href = 'guru-beranda.html';
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                alert("Login berhasil sebagai Siswa!");
+                window.location.href = 'sispus-home.html';
+            } else {
+                alert("Username atau password salah!");
+            }
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.querySelector('.toggle-password');
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+    </script>
+</body>
+</html>

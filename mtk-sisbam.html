@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Matematika</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #49243E, #33223C);
+      color: #EAE0F1;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(37, 18, 34, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.7);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 2.8em;
+      color: #FF6F91;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #C7ADC6;
+    }
+
+    input[type="text"], input[type="number"] {
+      font-size: 1.2em;
+      padding: 12px;
+      width: 85%;
+      border-radius: 8px;
+      border: 1px solid #FF6F91;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #EAE0F1;
+      text-align: center;
+      outline: none;
+      box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    input::placeholder {
+      color: #C7ADC6;
+    }
+
+    button {
+      font-size: 1.2em;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      margin: 10px 5px;
+      cursor: pointer;
+      background: #FF6F91;
+      color: #EAE0F1;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 111, 145, 0.5);
+    }
+
+    #question {
+      font-size: 1.5em;
+      margin: 25px 0;
+      color: #EAE0F1;
+      text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    #score, #timer {
+      font-size: 1.1em;
+      padding: 12px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 0 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #FF6F91;
+      font-weight: bold;
+    }
+
+    #lives {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .heart {
+      width: 35px;
+      height: 35px;
+      margin: 0 5px;
+      transition: opacity 0.3s ease, transform 0.3s;
+    }
+
+    .heart.empty {
+      opacity: 0.4;
+      filter: grayscale(100%);
+    }
+
+    .heart.full {
+      opacity: 1;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.85em;
+      color: #A78D9D;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Game Matematika</h1>
+    <div id="login" class="active">
+      <p>Masukkan nama Anda untuk memulai permainan:</p>
+      <input type="text" id="username" placeholder="Nama Anda">
+      <button id="loginButton">Login</button>
+    </div>
+    <div id="game" style="display: none;">
+      <p id="welcomeMessage"></p>
+      <div id="lives">
+        <img src="https://img.icons8.com/emoji/48/000000/red-heart.png" class="heart full" id="heart1">
+        <img src="https://img.icons8.com/emoji/48/000000/red-heart.png" class="heart full" id="heart2">
+        <img src="https://img.icons8.com/emoji/48/000000/red-heart.png" class="heart full" id="heart3">
+      </div>
+      <div id="score">Skor: 0</div>
+      <div id="timer">Waktu: 60</div>
+      <p id="question">Klik "Mulai" untuk memulai game!</p>
+      <input type="number" id="answer" placeholder="Jawaban Anda" disabled>
+      <button id="submit" disabled>Kirim Jawaban</button>
+      <button id="logout" style="display: none;">Logout</button>
+      <button id="start">Mulai</button>
+    </div>
+    <footer>
+      Dibuat dengan ♥ oleh Rizz.dev
+    </footer>
+  </div>
+  <script>
+    /* Script tetap sama seperti sebelumnya */
+  const loginPage = document.getElementById("login");
+  const gamePage = document.getElementById("game");
+  const usernameInput = document.getElementById("username");
+  const loginButton = document.getElementById("loginButton");
+  const welcomeMessage = document.getElementById("welcomeMessage");
+
+  const startButton = document.getElementById("start");
+  const submitButton = document.getElementById("submit");
+  const logoutButton = document.getElementById("logout");
+  const questionEl = document.getElementById("question");
+  const answerInput = document.getElementById("answer");
+  const timerEl = document.getElementById("timer");
+  const scoreEl = document.getElementById("score");
+
+  const heart1 = document.getElementById("heart1");
+  const heart2 = document.getElementById("heart2");
+  const heart3 = document.getElementById("heart3");
+
+  let timer;
+  let timeLeft = 60;
+  let score = 0;
+  let lives = 3;
+  let username = "";
+  let currentQuestion;
+
+  const questions = [
+    { question: "5 + 3", answer: 8 },
+    { question: "10 - 4", answer: 6 },
+    { question: "2 × 3", answer: 6 },
+    { question: "12 ÷ 4", answer: 3 },
+    { question: "(8 + 2) × 3", answer: 30 },
+    { question: "15 - (-5)", answer: 20 },
+    { question: "(20 ÷ 4) + 7", answer: 12 },
+    { question: "5² + 3", answer: 28 },
+    { question: "√81 × 2", answer: 18 },
+    { question: "7x = 21, berapa x?", answer: 3 },
+  ];
+
+  loginButton.addEventListener("click", () => {
+    username = usernameInput.value.trim();
+    if (!username) {
+      alert("Nama tidak boleh kosong!");
+      return;
+    }
+    loginPage.style.display = "none";
+    gamePage.style.display = "block";
+    welcomeMessage.textContent = `Selamat datang, ${username}!`;
+  });
+
+  startButton.addEventListener("click", startGame);
+  submitButton.addEventListener("click", checkAnswer);
+  logoutButton.addEventListener("click", () => location.reload());
+
+  function startGame() {
+    score = 0;
+    lives = 3;
+    timeLeft = 60;
+    updateLives();
+    scoreEl.textContent = `Skor: ${score}`;
+    timerEl.textContent = `Waktu: ${timeLeft}`;
+    answerInput.disabled = false;
+    submitButton.disabled = false;
+    logoutButton.style.display = "none";
+    startButton.style.display = "none";
+
+    timer = setInterval(updateTimer, 1000);
+    nextQuestion();
+  }
+
+  function updateTimer() {
+    timeLeft--;
+    timerEl.textContent = `Waktu: ${timeLeft}`;
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }
+
+  function nextQuestion() {
+    const randomIndex = Math.floor(Math.random() * questions.length);
+    currentQuestion = questions[randomIndex];
+    questionEl.textContent = `Soal: ${currentQuestion.question}`;
+  }
+
+  function checkAnswer() {
+    const userAnswer = parseInt(answerInput.value);
+    if (userAnswer === currentQuestion.answer) {
+      score += 10;
+      scoreEl.textContent = `Skor: ${score}`;
+      timeLeft += 2; // Tambah 2 detik jika jawaban benar
+      answerInput.value = "";
+      nextQuestion();
+    } else {
+      lives--;
+      updateLives();
+      answerInput.value = "";
+      if (lives <= 0) {
+        endGame();
+      }
+    }
+  }
+
+  function updateLives() {
+    const hearts = [heart1, heart2, heart3];
+    hearts.forEach((heart, index) => {
+      heart.className = index < lives ? "heart full" : "heart empty";
+    });
+  }
+
+  function endGame() {
+    clearInterval(timer);
+    questionEl.textContent = `Game selesai! Skor akhir Anda: ${score}`;
+    answerInput.disabled = true;
+    submitButton.disabled = true;
+    logoutButton.style.display = "inline-block";
+
+    // Simpan skor ke localStorage
+    const savedScores = JSON.parse(localStorage.getItem("scores")) || [];
+    savedScores.push({ name: username, score: score });
+    localStorage.setItem("scores", JSON.stringify(savedScores));
+  }
+  </script>
+</body>
+</html>

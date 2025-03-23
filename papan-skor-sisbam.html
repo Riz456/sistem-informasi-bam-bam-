@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Papan Skor</title>
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: #1e1e2f;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #27293d;
+      border-radius: 12px;
+      padding: 20px 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #6c63ff;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      color: #ffffff;
+    }
+
+    table, th, td {
+      border: 1px solid #6c63ff;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #6c63ff;
+      color: #ffffff;
+    }
+
+    button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #6c63ff;
+      color: #ffffff;
+    }
+
+    button:hover {
+      background: #ffffff;
+      color: #6c63ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Papan Skor</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Skor</th>
+        </tr>
+      </thead>
+      <tbody id="scoreboard">
+        <!-- Data akan diisi dengan JavaScript -->
+      </tbody>
+   
+  <script>
+    const scoreboardEl = document.getElementById("scoreboard");
+    const clearButton = document.getElementById("clearScores");
+
+    // Ambil skor dari localStorage
+    const scores = JSON.parse(localStorage.getItem("scores")) || [];
+
+    // Fungsi untuk menampilkan skor
+    function displayScores() {
+      scoreboardEl.innerHTML = "";
+      scores.sort((a, b) => b.score - a.score); // Urutkan berdasarkan skor tertinggi
+      scores.forEach((entry) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${entry.name}</td><td>${entry.score}</td>`;
+        scoreboardEl.appendChild(row);
+      });
+    }
+
+    
+
+    // Tampilkan skor saat halaman dimuat
+    displayScores();
+  </script>
+</body>
+</html> 

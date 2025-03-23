@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Tugas - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        body.dark-mode .header {
+            background-color: #1f1f1f;
+        }
+
+        .header .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header .icons i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .admin-tugas-list {
+            padding: 20px;
+        }
+
+        .tugas-item {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .tugas-item {
+            background-color: #333;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        body.dark-mode .footer {
+            background-color: #1f1f1f;
+        }
+
+        .footer div {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer i {
+            font-size: 18px;
+            display: block;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .form-container {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .form-container input, .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        body.dark-mode .form-container button {
+            background-color: #1f7a35;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>Tambah Tugas Siswa</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <!-- Form untuk Menambahkan Tugas Baru -->
+    <div class="form-container">
+        <h3>Tambah Tugas Baru</h3>
+        <form id="task-form">
+            <input type="text" id="task-title" placeholder="Judul Tugas" required />
+            <textarea id="task-description" placeholder="Deskripsi Tugas" required></textarea>
+            <button type="submit">Tambah Tugas</button>
+        </form>
+    </div>
+
+    <!-- Daftar Tugas -->
+    <div class="admin-tugas-list" id="admin-task-list">
+        <!-- Tugas yang sudah ditambahkan akan ditampilkan di sini -->
+    </div>
+
+    <!-- Footer -->
+      <div class="footer">
+        <div onclick="goToPage('guru-beranda.html')">
+            <i class="fas fa-home"></i>
+            <span data-lang="id">Beranda</span>
+            <span data-lang="en" style="display: none;">Home</span>
+        </div>
+        <div onclick="goToPage('guru-menu.html')">
+            <i class="fas fa-stream"></i>
+            <span data-lang="id">Menu</span>
+            <span data-lang="en" style="display: none;">Categories</span>
+        </div>
+        <div onclick="goToPage('guru-profil.html')">
+            <i class="fas fa-user"></i>
+            <span data-lang="id">Profil</span>
+            <span data-lang="en" style="display: none;">Profile</span>
+        </div>
+        <div onclick="goToPage('guru-pengaturan.html')">
+            <i class="fas fa-cog"></i>
+            <span data-lang="id">Pengaturan</span>
+            <span data-lang="en" style="display: none;">Settings</span>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk menavigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        // Fungsi untuk menambahkan tugas baru
+        function addTask(title, description) {
+            const tasks = JSON.parse(localStorage.getItem('Tugas')) || [];
+            const newTask = {
+                title,
+                description,
+                submitted: false,
+            };
+            tasks.push(newTask);
+            localStorage.setItem('Tugas', JSON.stringify(tasks));
+            displayAdminTasks();
+        }
+
+        // Fungsi untuk menampilkan tugas admin
+        function displayAdminTasks() {
+            const tasks = JSON.parse(localStorage.getItem('Tugas')) || [];
+            const adminTaskList = document.getElementById('admin-task-list');
+            
+            // Jika tidak ada tugas, tampilkan pesan
+            if (tasks.length === 0) {
+                adminTaskList.innerHTML = '<p>Belum ada tugas yang tersedia.</p>';
+                return;
+            }
+
+            // Tampilkan tugas
+            adminTaskList.innerHTML = tasks.map((task, index) => {
+                return `
+                    <div class="tugas-item">
+                        <h3>${task.title}</h3>
+                        <p>${task.description}</p>
+                        <p class="status">${task.submitted ? 'Tugas sudah dikumpulkan' : 'Tugas belum dikumpulkan'}</p>
+                        <button onclick="deleteTask(${index})">Hapus Tugas</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Fungsi untuk menghapus tugas
+        function deleteTask(index) {
+            const tasks = JSON.parse(localStorage.getItem('Tugas')) || [];
+            tasks.splice(index, 1);
+            localStorage.setItem('Tugas', JSON.stringify(tasks));
+            displayAdminTasks();
+        }
+
+        // Fungsi untuk beralih tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.remove("fa-moon");
+                themeToggle.classList.add("fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.remove("fa-sun");
+                themeToggle.classList.add("fa-moon");
+            }
+        }
+
+        // Menangani submit form
+        document.getElementById('task-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('task-title').value;
+            const description = document.getElementById('task-description').value;
+            addTask(title, description);
+            document.getElementById('task-title').value = '';
+            document.getElementById('task-description').value = '';
+        });
+
+        // Menampilkan tugas saat halaman dimuat
+        window.onload = function() {
+            // Set tema berdasarkan localStorage
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-toggle").classList.remove("fa-moon");
+                document.getElementById("theme-toggle").classList.add("fa-sun");
+            }
+
+            // Menampilkan daftar tugas
+            displayAdminTasks();
+        }
+    </script>
+
+</body>
+</html>

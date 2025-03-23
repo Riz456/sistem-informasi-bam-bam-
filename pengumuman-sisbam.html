@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengumuman - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        body.dark-mode .header {
+            background-color: #1f1f1f;
+        }
+
+        .header .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header .icons i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .header .icons .notification {
+            position: relative;
+        }
+
+        .header .icons .notification .dot {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .pengumuman-list {
+            padding: 20px;
+        }
+
+        .pengumuman-item {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .pengumuman-item {
+            background-color: #333;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .pengumuman-item h3 {
+            margin-bottom: 10px;
+        }
+
+        .pengumuman-item p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .pengumuman-item .tanggal {
+            font-size: 12px;
+            color: #888;
+        }
+
+        body.dark-mode .pengumuman-item .tanggal {
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h2>Sisbam - Pengumuman</h2>
+        <div class="icons">
+            <div class="notification">
+                <i class="fas fa-bell"></i>
+                <!-- Tanda titik merah jika ada pengumuman baru -->
+                <div class="dot"></div>
+            </div>
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <!-- Daftar Pengumuman -->
+    <div class="pengumuman-list" id="announcement-list">
+        <!-- Pengumuman akan ditampilkan di sini -->
+    </div>
+    <!-- JavaScript -->
+    <script>
+        // Fungsi untuk menavigasi ke halaman tertentu
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+       // Fungsi untuk menampilkan pengumuman
+function displayAnnouncements() {
+    const announcements = JSON.parse(localStorage.getItem('Pengumuman')) || [];
+    const announcementList = document.getElementById('announcement-list');
+    
+    // Jika tidak ada pengumuman, tampilkan pesan
+    if (announcements.length === 0) {
+        announcementList.innerHTML = '<p>Belum ada pengumuman.</p>';
+        return;
+    }
+
+    // Tampilkan pengumuman
+    announcementList.innerHTML = announcements.map(announcement => {
+        return `
+            <div class="pengumuman-item">
+                <h3>${announcement.title}</h3>
+                <p>${announcement.content}</p>
+                <p class="tanggal">Tanggal: ${announcement.date}</p>
+            </div>
+        `;
+    }).join('');
+}
+
+// Fungsi untuk beralih tema
+function toggleTheme() {
+    const body = document.body;
+    const themeToggle = document.getElementById("theme-toggle");
+
+    body.classList.toggle("dark-mode");
+
+    if (body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+        themeToggle.classList.remove("fa-moon");
+        themeToggle.classList.add("fa-sun");
+    } else {
+        localStorage.setItem("theme", "light");
+        themeToggle.classList.remove("fa-sun");
+        themeToggle.classList.add("fa-moon");
+    }
+}
+
+// Menampilkan pengumuman saat halaman dimuat
+window.onload = function() {
+    // Set tema berdasarkan localStorage
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+        document.getElementById("theme-toggle").classList.remove("fa-moon");
+        document.getElementById("theme-toggle").classList.add("fa-sun");
+    }
+
+    // Menampilkan pengumuman yang ada di localStorage
+    displayAnnouncements();
+};
+document.addEventListener("DOMContentLoaded", function () {
+        // Ketika halaman pengumuman dibuka, anggap semua pengumuman sudah dibaca
+        localStorage.setItem("newAnnouncement", "false");
+    });
+    </script>
+
+</body>
+</html>

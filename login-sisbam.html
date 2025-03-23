@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SisBam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link rel="website icon" type="png" href="sm.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body.dark-mode .container {
+            background-color: #1e1e1e;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode input {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-family: 'Audiowide', sans-serif;
+        }
+
+        body.dark-mode .header {
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 69%; /* Sesuaikan posisi vertikal */
+            transform: translateY(-50%); /* Pusatkan secara vertikal */
+            cursor: pointer;
+            color: #333;
+        }
+
+        .btn-submit {
+            background: #007bff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        body.dark-mode .footer {
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>SisBam</h2>
+        <div class="icons">
+            <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="username" placeholder="Masukkan username" required>
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" placeholder="Masukkan password" required>
+                <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+            </div>
+            <button type="button" class="btn-submit" onclick="login()">Masuk</button>
+        </form>
+        <div class="footer">
+            &copy; 2025 SisBam. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("theme-toggle");
+
+            body.classList.toggle("dark-mode");
+            
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggle.classList.replace("fa-sun", "fa-moon");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme");
+            const themeToggle = document.getElementById("theme-toggle");
+            
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.classList.replace("fa-moon", "fa-sun");
+            }
+        });
+
+        let loginAttempts = 0;
+        const maxLoginAttempts = 3;
+
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                alert("Username dan password harus diisi!");
+                return;
+            }
+
+            loginAttempts++;
+            if (loginAttempts > maxLoginAttempts) {
+                alert("Anda telah melebihi batas percobaan login. Silakan coba lagi nanti.");
+                return;
+            }
+
+            localStorage.setItem("username", username);
+
+            if (username === 'admin' && password === 'admin123') {
+                alert("Login berhasil sebagai Admin!");
+                window.location.href = 'system-sisbam.html';
+                return;
+            }
+
+            if (username === 'operator' && password === 'operator123') {
+                alert("Login berhasil sebagai Operator!");
+                window.location.href = 'operator-sisbam.html';
+                return;
+            }
+            if (username === 'ika' && password === 'uka') {
+                alert("Login berhasil sebagai pemilik hati admin !");
+                window.location.href = 'profil-sisbam.html';
+                return;
+            }
+
+            const guruData = JSON.parse(localStorage.getItem('guru')) || [];
+            const guru = guruData.find(g => g.username === username && g.password === password);
+
+            if (guru) {
+                alert("Login berhasil sebagai Guru!");
+                window.location.href = 'guru-beranda.html';
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                alert("Login berhasil sebagai Siswa!");
+                window.location.href = 'i-bam.html';
+            } else {
+                alert("Username atau password salah!");
+            }
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.querySelector('.toggle-password');
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+    </script>
+</body>
+</html>
